@@ -1,18 +1,16 @@
 <script setup>
+import { ref } from 'vue';
+
 const props = defineProps({
-    image: {
-        type: String
-    },
-    name: {
-        type: String
-    }, 
-    description: {
-        type: String
+    cardInfo: {
+        type: Object
     }
 })
+
+const cardInfo = ref(props.cardInfo);
 </script>
 <template>
-        <div class="bg-gray-900 w-[240px] h-[400px] p-3 rounded-2xl space-y-2 hover:scale-105 transition-transform cursor-pointer">
+        <div class="bg-gray-900 w-[210px] h-[350px] p-3 rounded-2xl space-y-2 hover:scale-105 transition-transform cursor-pointer">
             <!-- Imagem -->
             <div class="bg-black w-full h-2/5 flex justify-center items-center">
                 <img :src="image" alt="" v-if="image">
@@ -23,17 +21,17 @@ const props = defineProps({
                 <!-- Descrição -->
                 <div class="flex flex-col h-5/6">
                     <div class="flex-1 border rounded-lg p-1 overflow-auto">
-                        <p class="break-words text-xs">
-                        Faz tal coisa e bla bla, mas tambem faz isso e aquilo lá que é bem bacana para que o mundo continue sendo bom e ruim ao mesmo tempo fora dessa realidade material demiurgeal onde nós sofremos em um loop incessante de dor e sofrimento assim fazendo com que o mundo 
-                        </p>
+                        <span class="break-words text-[10px] m-0 p-0">
+                            {{ cardInfo?.description }}
+                        </span>
                     </div>
                 </div>
                 <!-- Atributos -->
                 <div class="flex h-1/6 text-xs justify-between items-center">
-                    <span>Vida: 100</span>
+                    <span class="">Vida: {{ cardInfo.stats?.life }}</span>
                     <div class="space-x-1">
-                        <span>Defesa: 200</span>
-                        <span>Ataque: 20</span>
+                        <span>Defesa: {{ cardInfo.stats?.defense }}</span>
+                        <span>Ataque: {{ cardInfo.stats?.attack }}</span>
                     </div>
                 </div>
             </div>
