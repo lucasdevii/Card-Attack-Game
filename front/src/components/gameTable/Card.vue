@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 
 const props = defineProps({
     cardInfo: {
@@ -8,11 +8,13 @@ const props = defineProps({
 })
 
 const cardInfo = ref(props.cardInfo);
+
+
 </script>
 <template>
-        <div class="bg-gray-900 w-[180px] h-[280px] p-2 rounded-2xl space-y-2 hover:scale-105 transition-transform cursor-pointer">
+        <div class="bg-gray-800 w-full h-full px-2 rounded-xl space-y-2 hover:scale-105 transition-transform cursor-pointer overflow-hidden" >
             <div class="h-3/6">
-                <div class="flex h-1/5 text-[10px] justify-between items-center">
+                <div class="flex h-1/5 text-[9px] justify-between items-center">
                     <span class="">Vida: {{ cardInfo.stats?.life }}</span>
                     <div class="space-x-1">
                         <span>Defesa: {{ cardInfo.stats?.defense }}</span>
@@ -26,10 +28,10 @@ const cardInfo = ref(props.cardInfo);
                 </div>
             </div>
             <div class="flex flex-col h-3/6">
-                <div class="flex-1 border rounded-lg p-1 overflow-hidden">
-                    <span class="break-words text-[8px] leading-tight">
+                <div class="flex-1 border p-1 text-center overflow-hidden box-border">
+                    <p class="break-words text-[8px] leading-tight">
                         {{ cardInfo?.description }}
-                    </span>
+                    </p>
                 </div>
             </div>
         </div>

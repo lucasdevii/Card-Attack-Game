@@ -1,6 +1,6 @@
 <script setup>
 import Card from '@/components/gameTable/Card.vue';
-import { onUnmounted, ref } from 'vue';
+import { onUnmounted, onMounted, ref } from 'vue';
 
 const mock = [
   {
@@ -43,6 +43,7 @@ Se atingir 3 ou mais inimigos, ganha +2 de defesa neste turno.`,
 
 const currentCards = ref(mock); 
 const cardForShowInfos = ref(null);
+const enemyCardsDispatched = ref([{},{},{}])
 
 const inCard = ref(false); //Verifica se o mouse esta sobre alguma carta
 
@@ -75,6 +76,7 @@ function verifyMouseInCard(event){
   }
 }
 
+
 onUnmounted(() => {
   window.removeEventListener("click");
 })
@@ -83,20 +85,32 @@ onUnmounted(() => {
 <template>
   <div class="w-screen h-screen relative overflow-hidden">
     <!-- Tabuleiro -->
-    <div class="w-full h-full">
-      <div>
-        <div></div>
+    <div class="w-full h-full bg-slate-900 flex flex-col justify-between">
+      <!-- Nemy Row -->
+      <div class="w-full h-[150px] bg-white flex justify-center items-center">
+        <!-- CardSlot || Altura = 50% do card e é proporcional a largura -->
+        <div class="w-[90px] h-[135px] bg-slate-500 mx-4" v-for="card in enemyCardsDispatched">
+          <Card :cardInfo="card" />
+        </div>
+      </div>
+
+      <!-- Row user -->
+      <div  class="w-full mb-24 h-[150px] bg-white flex justify-center items-center">
+        <!-- CardSlot || Altura = 50% do card e é proporcional a largura -->
+        <div class="w-[90px] h-[135px] bg-slate-500 mx-4" v-for="card in enemyCardsDispatched">
+          <Card :cardInfo="card" ref="cardRef"/>
+        </div>
       </div>
     </div>
     <!-- Cartas -->
-    <div class="absolute bottom-[-135px] w-full flex justify-center space-x-4">
+    <div class="absolute bottom-[-130px] w-full ml-4 flex justify-start space-x-4">
       <div 
         v-for="(card, index) in currentCards" 
         :key="index"
         @mouseenter="isInCard(true)"
         @mouseleave="isInCard(false)"
         @click="clickInCard(index)"
-        class="transition-all duration-500 ease-in-out cursor-pointer"
+        class="transition-all duration-500 ease-in-out cursor-pointer h-[260px] w-[160px]"
         :class="cardForShowInfos === index 
           ? 'translate-y-[-300px] scale-105 z-50' 
           : 'hover:-translate-y-10'"
