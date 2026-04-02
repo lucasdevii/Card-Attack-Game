@@ -43,9 +43,8 @@ Se atingir 3 ou mais inimigos, ganha +2 de defesa neste turno.`,
 
 const currentCards = ref(mock); 
 const cardForShowInfos = ref(null);
+
 const inCard = ref(false); //Verifica se o mouse esta sobre alguma carta
-
-
 
 // Selecionando carta
 function clickInCard(index){
@@ -83,8 +82,14 @@ onUnmounted(() => {
 </script>
 <template>
   <div class="w-screen h-screen relative overflow-hidden">
+    <!-- Tabuleiro -->
+    <div class="w-full h-full">
+      <div>
+        <div></div>
+      </div>
+    </div>
     <!-- Cartas -->
-    <div class="absolute bottom-[-150px] w-full flex justify-center space-x-4">
+    <div class="absolute bottom-[-135px] w-full flex justify-center space-x-4">
       <div 
         v-for="(card, index) in currentCards" 
         :key="index"
