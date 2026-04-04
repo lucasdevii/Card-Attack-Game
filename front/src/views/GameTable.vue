@@ -33,8 +33,8 @@ Se atingir 3 ou mais inimigos, ganha +2 de defesa neste turno.`,
 const currentCards = ref(mock);
 const cardForShowInfos = ref(null);
 
-const enemyCardsDispatched = ref([{},{},{}]);
-const userCardsDispatched = ref([{},{},{}]);
+const enemyCardsDispatched = ref([null, null, null]);
+const userCardsDispatched = ref([null, null, null]);
 
 // Clique na carta
 function clickInCard(index){
@@ -48,7 +48,12 @@ function clickInCard(index){
 
 // Remove da mão
 function dispatchCard(index){
-  currentCards.value = currentCards.value.filter((_, i) => i !== index);
+  const emptyIndex = userCardsDispatched.value.findIndex(c => c === null);
+
+  if (emptyIndex !== -1) {
+    userCardsDispatched.value[emptyIndex] = currentCards.value[index];
+    currentCards.value.splice(index, 1);
+  }
 }
 
 // Clique fora (profissional)

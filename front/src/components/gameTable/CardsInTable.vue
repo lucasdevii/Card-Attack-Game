@@ -7,14 +7,14 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="w-full h-[150px] bg-white flex justify-center items-center">
+  <div class="w-full h-[160px] bg-white flex justify-center items-center my-4">
     
     <div 
-      v-for="(index,card) in props.cardsList"
+      v-for="(card,index) in props.cardsList"
       :key="index"
       class="mx-4 flex justify-center items-center h-full w-[100px]"
     >
-      <Card v-if="card.description" :cardInfo="card"/>
+      <Card v-if="card?.description" :cardInfo="card"/>
       <div v-else class="bg-gray-800 w-full h-full flex justify-center items-center">
         Vazio
       </div>
