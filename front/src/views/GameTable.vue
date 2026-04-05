@@ -1,6 +1,7 @@
 <script setup>
 import Card from '@/components/gameTable/Card.vue';
 import CardsInTable from '@/components/gameTable/CardsInTable.vue';
+import PerfilInformation from '@/components/gameTable/PerfilInformation.vue';
 import { onMounted, onUnmounted, ref } from 'vue';
 
 const mock = [
@@ -39,21 +40,10 @@ const userCardsDispatched = ref([null, null, null]);
 // Clique na carta
 function clickInCard(index){
   if(cardForShowInfos.value === index){
-    dispatchCard(index);
     cardForShowInfos.value = null;
-    return;
+    return
   }
   cardForShowInfos.value = index;
-}
-
-// Remove da mão
-function dispatchCard(index){
-  const emptyIndex = userCardsDispatched.value.findIndex(c => c === null);
-
-  if (emptyIndex !== -1) {
-    userCardsDispatched.value[emptyIndex] = currentCards.value[index];
-    currentCards.value.splice(index, 1);
-  }
 }
 
 // Clique fora (profissional)
@@ -77,29 +67,42 @@ onUnmounted(() => {
 
 <template>
   <div class="w-screen h-screen relative overflow-hidden">
-
+    <!-- Fade da descrição -->
+    <div
+     class="absolute left-0 top-0 bottom-0 w-[28vw] bg-gradient-to-r from-black/80 to-transparent break-words duration-300" 
+     :class="cardForShowInfos !== null? '':'-translate-x-[200%]'"
+    >
+      Descrição aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    </div>
     <!-- Tabuleiro -->
     <div class="w-full h-full bg-slate-900 flex flex-col justify-between">
-      <CardsInTable :cardsList="enemyCardsDispatched"/>
-      <CardsInTable :cardsList="userCardsDispatched"/>
+      
+      <CardsInTable :cardsDispatched="enemyCardsDispatched"/>
+      <CardsInTable 
+        v-model:cardsDispatched="userCardsDispatched"
+        :cardClicked="cardForShowInfos"
+        :currentCards="currentCards"
+      />
     </div>
 
     <!-- Cartas -->
-    <div class="absolute bottom-[-130px] w-full ml-4 flex justify-start space-x-4">
-      
-      <div 
-        v-for="(card, index) in currentCards" 
-        :key="card.id"
-        @click="clickInCard(index)"
-        class="card-wrapper transition-transform duration-500 ease-in-out cursor-pointer"
-        style="width: 160px"
-        :class="cardForShowInfos === index
-          ? 'translate-y-[-300px] scale-105 z-50'
-          : 'hover:-translate-y-10'"
-      >
-        <Card :cardInfo="card" class="shadow-black shadow-xl"/>
+    <div class="absolute bottom-0 w-full px-3 flex justify-between pointer-events-none ">
+      <div class="relative">
+        <div class="absolute bottom-[-130px] flex space-x-3">
+          <div 
+            v-for="(card, index) in currentCards" 
+            :key="card.id"
+            @click="clickInCard(index)"
+            class="card-wrapper transition-transform duration-500 ease-in-out cursor-pointer pointer-events-auto"
+            style="width: 140px"
+            :class="cardForShowInfos === index
+              ? 'translate-y-[-300px] scale-105 z-50'
+              : 'hover:-translate-y-10'"
+          >
+            <Card :cardInfo="card" class="shadow-slate-800 shadow-md"/>
+          </div>
+        </div>
       </div>
-
     </div>
   </div>
 </template>
