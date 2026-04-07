@@ -3,7 +3,7 @@ import Card from '@/components/gameTable/Card.vue';
 
 const props = defineProps({
   cardsDispatched: {type: Array},
-  cardClicked: {type: Number, default: null},
+  cardClicked: {type: Object},
   currentCards: {type: Array}
 });
 
@@ -14,13 +14,13 @@ const emit = defineEmits(["update:cardsDispatched","update:currentCards"]);
   * @param index do slot de carta
   */
 const addCardInSlot = (index) => {
-  if (props.cardClicked !== null) {
+  if (props.cardClicked.index !== null) {
     //Passa da mão para a mesa
     const updatedBoard = [...props.cardsDispatched];
-    updatedBoard[index] = props.currentCards[props.cardClicked];
+    updatedBoard[index] = props.currentCards[props.cardClicked.index];
     emit("update:cardsDispatched", updatedBoard);
     //Retira da mão
-    const currentCards = props.currentCards.splice(props.cardClicked, 1);
+    const currentCards = props.currentCards.splice(props.cardClicked.index, 1);
     emit("update:currentCards", currentCards)
   }
 }
@@ -40,13 +40,10 @@ const addCardInSlot = (index) => {
         v-else 
         @click="addCardInSlot(index)"
         class="bg-gray-800 w-full h-full flex justify-center items-center rounded-md cursor-pointer hover:scale-105 transition-transform"
-        :class="cardClicked != null? 'shadow-[0_0_15px_rgba(251,191,36,0.5)] shadow-amber-200':''"
+        :class="cardClicked?.index != null? 'shadow-[0_0_15px_rgba(251,191,36,0.5)] shadow-amber-200':''"
       >
         Vazio
       </div>
-    </div>
-    <div class="absolute right-3 bottom-3">
-      <PerfilInformation/>
     </div>
 
   </div>

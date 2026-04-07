@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "name": "Kael, o Portador de Cinzas",
+    "description": "Causa 4 de dano a um inimigo. Se o alvo estiver com menos de 50% de vida, causa +2 de dano adicional. Ao eliminar um inimigo, ganha +1 de ataque permanentemente.",
+    "stats": { "life": 12, "attack": 4, "defense": 2 },
+    "image": "http://localhost:8000/src/cards/archer_village.png"
+  },
+  {
+    "id": 2,
+    "name": "Lyra, Guardiã da Névoa",
+    "description": "Concede um escudo de 3 pontos a um aliado. Enquanto o escudo estiver ativo, reduz todo dano recebido em 1. Se o escudo for quebrado, cura 2 de vida.",
+    "stats": { "life": 10, "attack": 2, "defense": 5 },
+    "image": "http://localhost:8000/src/cards/mage_frost.png"
+  },
+  {
+    "id": 3,
+    "name": "Drogar, o Devorador de Ossos",
+    "description": "Causa 3 de dano a todos os inimigos. Para cada inimigo atingido, recupera 1 de vida. Se atingir 3 ou mais inimigos, ganha +2 de defesa neste turno.",
+    "stats": { "life": 14, "attack": 3, "defense": 3 },
+    "image": "http://localhost:8000/src/cards/warrior_.png"
+  }
+]
