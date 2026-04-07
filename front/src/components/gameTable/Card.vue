@@ -13,7 +13,7 @@ const props = defineProps({
 onMounted(() => {
     //Configura a altura apenas com base na largura para que não haja problema de proporcionalidade
     const width = cardRef.value.getBoundingClientRect().width;
-    cardHeight.value = width * 1.4
+    cardHeight.value = width * 1.5
 })
 
 </script>
@@ -26,6 +26,6 @@ onMounted(() => {
             "
             ref="cardRef"
         >
-            <img :src="props.cardInfo.image" alt="" class="w-full ">
+            <img :src="props.cardInfo.image" alt="" class="flex-1">
         </div>
 </template>
