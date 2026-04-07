@@ -51,10 +51,13 @@ onUnmounted(() => {
   <div class="w-screen h-screen relative overflow-hidden">
     <!-- Fade da descrição -->
     <div
-     class="absolute left-0 top-0 bottom-0 w-[28vw] bg-gradient-to-r from-black/80 to-transparent break-words duration-300 p-5" 
+     class="absolute left-0 top-0 bottom-0 w-[32vw] bg-gradient-to-r from-black/80 to-transparent break-words duration-300 p-5 z-10 pointer-events-none" 
      :class="cardClicked.index !== null? '':'-translate-x-[200%]'"
     >
-      {{cardClicked?.card?.description}}
+      <div>
+        <h1 class="mb-6 text-[18px]">{{cardClicked?.card?.name}}</h1>
+        <span class="text-[12px]">{{cardClicked?.card?.description}}</span>
+      </div>
     </div>
     <!-- Tabuleiro -->
     <div class="w-full h-full bg-slate-900 flex flex-col justify-between">
@@ -78,7 +81,7 @@ onUnmounted(() => {
             class="card-wrapper transition-transform duration-500 ease-in-out cursor-pointer pointer-events-auto"
             style="width: 140px"
             :class="cardClicked.index === index
-              ? 'translate-y-[-300px] scale-105 z-50'
+              ? 'translate-y-[-200px] scale-105 z-50'
               : 'hover:-translate-y-10'"
           >
             <Card :cardInfo="card" class="shadow-slate-800 shadow-md"/>
