@@ -3,13 +3,13 @@ import App from "./App.vue"
 import { router } from "./routes/router"
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faUser, faHeart} from '@fortawesome/free-solid-svg-icons'
+import { faUser, faHeart, faCircleUser} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 import "./assets/main.css"
 
 // 👇 adiciona ícones na biblioteca
-library.add(faUser, faHeart)
+library.add(faUser, faHeart, faCircleUser)
 
 const app = createApp(App)
 app.use(router)

@@ -60,14 +60,21 @@ onUnmounted(() => {
       </div>
     </div>
     <!-- Tabuleiro -->
-    <div class="w-full h-full bg-slate-900 flex flex-col justify-between">
+    <div class="relative w-full h-full bg-slate-900 flex flex-col justify-between">
       
       <CardsInTable :cardsDispatched="enemyCardsDispatched"/>
+      <!-- Perfil do inimigo -->
+      <div class="absolute top-0">
+        <PerfilInformation/>
+      </div>
       <CardsInTable 
         v-model:cardsDispatched="userCardsDispatched"
         :cardClicked="cardClicked"
         :currentCards="currentCards"
       />
+      <div class="absolute bottom-0 right-0">
+        <PerfilInformation/>
+      </div>
     </div>
 
     <!-- Cartas -->
@@ -88,7 +95,7 @@ onUnmounted(() => {
           </div>
         </div>
       </div>
-      <PerfilInformation/>
+
     </div>
   </div>
 </template>
