@@ -1,7 +1,7 @@
 <script setup>
-import Card from '@/components/gameTable/Card.vue';
-import CardsInTable from '@/components/gameTable/CardsInTable.vue';
-import PerfilInformation from '@/components/gameTable/PerfilInformation.vue';
+import Card from '@/components/layouts/gameTable/Card.vue';
+import CardsInTable from '@/components/layouts/gameTable/CardsInTable.vue';
+import PerfilInformation from '@/components/layouts/gameTable/PerfilInformation.vue';
 import { getCards } from '@/services/CardService';
 import { onMounted, onUnmounted, ref } from 'vue';
 

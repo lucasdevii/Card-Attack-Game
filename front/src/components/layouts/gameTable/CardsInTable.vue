@@ -1,5 +1,5 @@
 <script setup>
-import Card from '@/components/gameTable/Card.vue';
+import Card from '@/components/layouts/gameTable/Card.vue';
 
 const props = defineProps({
   cardsDispatched: {type: Array},
