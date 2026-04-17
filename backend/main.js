@@ -1,3 +1,4 @@
+import { errorHandler } from "./src/middlewares/errorHandler.js"
 import express from "express"
 import cors from "cors"
 import router from "./src/routes/router.js"
@@ -22,6 +23,7 @@ app.use(express.json());
 app.use(cookiesParser());
 app.use("/assets", express.static(path.join(__dirname, "src/public"))); //Pega apenas o caminho da pasta public e troca por assets
 app.use("/api", router);
+app.use(errorHandler);
 
 const PORT = 8000;
 
