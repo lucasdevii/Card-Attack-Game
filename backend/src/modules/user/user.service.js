@@ -7,7 +7,6 @@ export const createUser = async (name, email, password) => {
         error.status = 400;
         throw error;
     }
-
     const user = await prisma.users.create({
         data: {
             name:name,

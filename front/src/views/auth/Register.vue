@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { faEnvelope, faKey, faUserTag } from '@fortawesome/free-solid-svg-icons';
 import { cadaster } from '@/services/AuthService.js'
-import InputWithIcon from '@/components/ui/InputWithIcon.vue';
+import InputWithIcon from '@/components/ui/form/InputWithIcon.vue';
 
 
 const name = ref("");
@@ -10,21 +10,24 @@ const email = ref("");
 const password = ref("");
 const passwordConfirmation = ref("");
 
-const errorValidation = ref({
+const validationBase = {
     name: "",
     email: "",
     password: "",
     passwordConfirmation: ""
-})
+}
+const errorValidation = ref({...validationBase});
 
 const sendInfos = async () => {
   try{
+      errorValidation.value = {...validationBase};
       await cadaster({
         name: name.value,
         email: email.value,
         password: password.value,
         passwordConfirmation: passwordConfirmation.value
       });
+      
   }catch (err) {
       const errors = err.response?.data?.errors?.fieldErrors;
 

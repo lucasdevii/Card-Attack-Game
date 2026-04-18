@@ -29,7 +29,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/cards", cardRoutes);
 app.use(errorHandler);
 
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 
 app.listen(PORT, () => {
     console.log("Servidor rodando na porta: " + PORT)
