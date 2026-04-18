@@ -1,8 +1,9 @@
 <script setup>
 import { ref } from 'vue';
 import { faEnvelope, faKey, faUserTag } from '@fortawesome/free-solid-svg-icons';
-import InputWithIcon from '@/components/ui/InputWithIcon.vue';
 import { cadaster } from '@/services/AuthService.js'
+import InputWithIcon from '@/components/ui/InputWithIcon.vue';
+
 
 const name = ref("");
 const email = ref("");
@@ -18,14 +19,12 @@ const errorValidation = ref({
 
 const sendInfos = async () => {
   try{
-      console.log(`req enviada: nome: ${name.value}, email: ${email.value}, senha: ${password.value}, repetir senha: ${passwordConfirmation.value}`)
-      const res = await cadaster({
+      await cadaster({
         name: name.value,
         email: email.value,
         password: password.value,
         passwordConfirmation: passwordConfirmation.value
       });
-      console.log(res.message);
   }catch (err) {
       const errors = err.response?.data?.errors?.fieldErrors;
 
@@ -37,8 +36,6 @@ const sendInfos = async () => {
           passwordConfirmation: errors.passwordConfirmation?.[0] || ""
         };
       }
-
-      console.log(err);
   }
 
 }
