@@ -6,7 +6,7 @@ export const userCadaster = async (req, res, next) => {
         const validatedData = userSchema.parse(req.body);
         const { username, email, password } = validatedData;
         await createUser(username, email, password);
-        res.status(201).json({ message: "User created successfully!" });
+        res.status(201).json({ message: "Usuário criado com sucesso!" });
     } catch (error) {
         next(error);
     }

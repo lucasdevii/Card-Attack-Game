@@ -4,14 +4,23 @@ import { registerSchema, loginSchema } from './auth.schema.js';
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
 
-export const register = async (req, res, next) => {
+export const register = asyncHandler(async (req, res, next) => {
     const { name, email, password } = req.body;
 
+    const existingUser = await getUserByEmail(email);
+    if (existingUser) {
+        return res.status(400).json({ message: 'Email já está em uso.' });
+    }
+
     const passwordHashed = await bcrypt.hash(password, Number(process.env.BCRYPT_ROUNDS || 10));
+
     const user = await createUser(name, email, passwordHashed);
 
-    const token = jwt.sign({ email: email, id: user.id,  }, process.env.JWT_SECRET);
+    if(!process.env.JWT_SECRET) {
+        return res.status(500).json({ message: 'Erro interno do servidor.' });
+    }
 
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '7d' });
     const safeUser = {
         name: user.name,
         email: user.email,
@@ -21,15 +30,54 @@ export const register = async (req, res, next) => {
       .cookie('token', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        expiresIn: '7d',
+        sameSite: 'strict',
+        maxAge: 7 * 24 * 60 * 60 * 1000
       })
       .json({
         safeUser,
-        message: 'User created successfully!',
+        message: 'Usuário criado com sucesso!',
       });
-};
+});
 
-export const login = async (req, res, next) => {
+export const login = asyncHandler(async (req, res, next) => {
+    if(!process.env.JWT_SECRET) {
+        return res.status(500).json({ message: 'Erro interno do servidor.' });
+    }
+  
     const { email, password } = req.body;
-    return res.status(200).json({ message: 'Login successful!' });
-};
+    const FAKE_HASH = "$2b$10$abcdefghijklmnopqrstuv"; //Evitar o attack de user enumeration, mesmo que o email não exista, o bcrypt irá comparar a senha com um hash fake, garantindo que o tempo de resposta seja o mesmo para emails existentes e não existentes.
+    
+    const cookiesToken = req.cookies.token;
+
+    if (cookiesToken) {
+      try {
+        const decoded = jwt.verify(cookiesToken, process.env.JWT_SECRET);
+
+        const userFromToken = await getUserById(decoded.id);
+
+        if (!userFromToken) {
+          res.clearCookie('token'); // usuário deletado
+        } 
+      } catch {
+        res.clearCookie('token'); // token inválido ou expirado
+      }
+    }
+
+    const user = await getUserByEmail(email);
+    const hash = user?.password || FAKE_HASH;
+
+    const isPasswordValid = await passwordMatches(hash, password);
+    if (!user || !isPasswordValid) {
+        return res.status(401).json({ message: 'Email ou senha incorretos.' });
+    }
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+
+    return res.status(200)
+      .cookie('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 7 * 24 * 60 * 60 * 1000
+      })
+      .json({ message: 'Login realizado com sucesso!' });
+});

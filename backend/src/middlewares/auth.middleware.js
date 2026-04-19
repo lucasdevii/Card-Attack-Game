@@ -4,7 +4,7 @@ export const isGuest = (req, res, next) => {
     if (!token) {
         next();
     } else {
-        return res.status(401).json({"message": "Unauthenticated users only!"});
+        return res.status(401).json({"message": "Apenas usuários não autenticados!"});
     }
 }
 
@@ -14,6 +14,6 @@ export const isAuth = (req, res, next) => {
     if (token) {
         next();
     } else {
-        return res.status(401).json({"message": "Authenticated users only!"});
+        return res.status(401).json({"message": "Apenas usuários autenticados!"});
     }
 }

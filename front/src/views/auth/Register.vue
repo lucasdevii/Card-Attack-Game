@@ -18,7 +18,7 @@ const validationBase = {
 }
 const errorValidation = ref({...validationBase});
 
-const sendInfos = async () => {
+const handleRegister = async () => {
   try{
       errorValidation.value = {...validationBase};
       await cadaster({
@@ -49,7 +49,7 @@ const sendInfos = async () => {
   <div class="min-h-screen flex">
     <div class="flex-1 bg-gradient-to-br from-slate-900 to-black flex justify-center items-center flex-col">
       <h1 class="mb-4 text-xl font-bold">CADASTRO</h1>
-      <div class="w-[420px] bg-slate-800 rounded-2xl px-4 py-8 shadow-xl flex flex-col">
+      <div class="min-w-[420px] bg-slate-800 rounded-2xl px-4 py-8 shadow-xl flex flex-col">
         <!-- Nome -->
         <div>
           <InputWithIcon 
@@ -95,12 +95,12 @@ const sendInfos = async () => {
         </div>
         <button 
           class="mt-4 bg-blue-600 hover:bg-blue-700 transition text-white py-2 rounded-lg font-semibold"
-          @click="sendInfos()"
+          @click="handleRegister()"
         >
           Criar conta
         </button>
         <div class="flex justify-end w-full mt-2">
-            <span class="text-xs cursor-pointer">Já tenho uma conta</span>
+            <span class="text-sm cursor-pointer text-blue-500">Já tenho uma conta</span>
         </div>
       </div>
 

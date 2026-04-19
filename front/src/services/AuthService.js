@@ -11,3 +11,13 @@ export const cadaster = async (values) => {
         throw error;
     }
 }
+
+export const login = async (values) => {
+    try {
+        const res = await axios.post(`${apiUrl}/auth/login`, values, { withCredentials: true });
+        return res.data;
+    } catch (error) {
+        console.log(error?.response?.data ?? error);
+        throw error;
+    }
+}
