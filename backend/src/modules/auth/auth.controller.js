@@ -1,4 +1,4 @@
-import { createUser } from '../user/user.service.js';
+import { createUser, getUserByEmail, getUserById, passwordMatches } from '../user/user.service.js';
 import asyncHandler from '../../middlewares/asyncHandler.js';
 import { registerSchema, loginSchema } from './auth.schema.js';
 import bcrypt from 'bcrypt'

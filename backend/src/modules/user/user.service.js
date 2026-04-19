@@ -1,4 +1,5 @@
 import { prisma } from "../../../prisma/client.js";
+import bcrypt from 'bcrypt';
 
 export const createUser = async (name, email, password) => {
     const userExists = await prisma.users.findUnique({ where: { email } });

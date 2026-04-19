@@ -25,6 +25,7 @@ const handleLogin = async () => {
             email: email.value,
             password: password.value
         });
+        router.push("/GameTable");
         console.log(res);
     } catch (err) {
         const errors = err.response?.data?.errors?.fieldErrors;

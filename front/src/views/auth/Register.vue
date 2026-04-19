@@ -3,7 +3,9 @@ import { ref } from 'vue';
 import { faEnvelope, faKey, faUserTag } from '@fortawesome/free-solid-svg-icons';
 import { cadaster } from '@/services/AuthService.js'
 import InputWithIcon from '@/components/ui/form/InputWithIcon.vue';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 
 const name = ref("");
 const email = ref("");
@@ -27,7 +29,7 @@ const handleRegister = async () => {
         password: password.value,
         passwordConfirmation: passwordConfirmation.value
       });
-      
+      router.push("/GameTable");
   }catch (err) {
       const errors = err.response?.data?.errors?.fieldErrors;
 
@@ -100,7 +102,7 @@ const handleRegister = async () => {
           Criar conta
         </button>
         <div class="flex justify-end w-full mt-2">
-            <span class="text-sm cursor-pointer text-blue-500">Já tenho uma conta</span>
+            <span class="text-sm cursor-pointer text-blue-500" @click="router.push('/login')">Já tenho uma conta</span>
         </div>
       </div>
 
