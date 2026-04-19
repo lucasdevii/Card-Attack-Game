@@ -11,8 +11,8 @@ const infosBase = {index: null, card: null}
 const currentCards = ref(null);
 const cardClicked = ref(infosBase);
 
-const enemyCardsDispatched = ref([null, null, null]);
-const userCardsDispatched = ref([null, null, null]);
+const enemyCardsDispatched = ref({ front: [null, null, null], back: [null, null] });
+const userCardsDispatched = ref({ back: [null, null, null], front: [null, null] });
 
 // Clique na carta
 function clickInCard(index){
@@ -59,7 +59,7 @@ onUnmounted(() => {
         <span class="text-[12px]">{{cardClicked?.card?.description}}</span>
       </div>
     </div>
-    <!-- Tabuleiro -->
+    <!-- Tabuleiro Screen-->
     <div class="relative w-full h-full bg-slate-900 flex flex-col justify-between">
       
       <CardsInTable :cardsDispatched="enemyCardsDispatched"/>
@@ -67,10 +67,12 @@ onUnmounted(() => {
       <div class="absolute top-0">
         <PerfilInformation/>
       </div>
+
+      <!-- Perfil do usuário -->
       <CardsInTable 
         v-model:cardsDispatched="userCardsDispatched"
-        :cardClicked="cardClicked"
-        :currentCards="currentCards"
+        v-model:cardClicked="cardClicked"
+        v-model:currentCards="currentCards"
       />
       <div class="absolute bottom-0 right-0">
         <PerfilInformation/>
@@ -78,7 +80,7 @@ onUnmounted(() => {
     </div>
 
     <!-- Cartas -->
-    <div class="absolute bottom-0 w-full px-3 py-3 flex justify-between pointer-events-none ">
+    <div class="absolute bottom-0 w-full p-3 flex justify-between pointer-events-none ">
       <div class="relative">
         <div class="absolute bottom-[-130px] flex space-x-3">
           <div 
@@ -95,7 +97,6 @@ onUnmounted(() => {
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </template>
