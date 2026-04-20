@@ -20,7 +20,7 @@ onMounted(() => {
 <template>
         <div v-if="props.cardInfo" 
             :style="`height: ${cardHeight}px`"
-            class="bg-[#FCE5D0] w-full space-y-2 hover:scale-105 transition-transform cursor-pointer overflow-hidden" 
+            class="card-wrapper bg-[#FCE5D0] w-full space-y-2 hover:scale-105 transition-transform cursor-pointer overflow-hidden" 
             :class="
                 cardHeight < 200? 'rounded-md ':'rounded-lg '
             "

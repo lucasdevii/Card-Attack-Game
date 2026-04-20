@@ -7,10 +7,10 @@ import { getCards } from '@/services/CardService';
 import { onMounted, onUnmounted, ref } from 'vue';
 
 const cardLimit = 3;
-const infosBase = {index: null, card: null}
+const infosBase = {index: null, card: null, line: null}
 
 const currentCards = ref(null);
-const cardClicked = ref(infosBase);
+const cardClicked = ref({...infosBase});
 
 const enemyCardsDispatched = ref({ front: [null, null], back: [null, null, null] });
 const userCardsDispatched = ref({ front: [null, null, null], back: [null, null] });
@@ -20,7 +20,7 @@ function verifyMouseInCard(event){
   const clickedInside = event.target.closest('.card-wrapper');
 
   if (!clickedInside) {
-    cardClicked.value = infosBase;
+    cardClicked.value = {...infosBase};
   }
 }
 onMounted(async () => {

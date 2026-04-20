@@ -10,12 +10,12 @@ const emit = defineEmits(['update:cardClicked']);
 
 const clickInCard = (index) => {
   if(props.cardClicked.index === index){
-    const cardClicked = {index: null, card: null};
+    const cardClicked = {index: null, card: null, line: null};
     emit('update:cardClicked', cardClicked);
     return
   }
 
-  const cardClicked = {index: index, card: props.currentCards[index]};
+  const cardClicked = {index: index, card: props.currentCards[index], line: 'hand'};
   emit('update:cardClicked', cardClicked);
 }
 

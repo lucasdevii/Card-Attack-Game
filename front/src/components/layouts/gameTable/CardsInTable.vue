@@ -1,4 +1,5 @@
 <script setup>
+import { nextTick } from 'vue';
 import Card from '@/components/layouts/gameTable/Card.vue';
 
 const props = defineProps({
@@ -28,8 +29,22 @@ const addCardInSlot = (index, line) => {
     const updatedHand = [...props.currentCards];
     updatedHand.splice(props.cardClicked.index, 1);
     emit("update:currentCards", updatedHand);
-    emit("update:cardClicked", { index: null, card: null });
+    emit("update:cardClicked", { index: null, card: null, line: null });
   }
+}
+
+const clickInCard = async (index, card, line) => {
+  //Se for a mesma carta clicada duas vezes tira
+  if(props.cardClicked.index == index && props.cardClicked.line == line){
+    const newInfoCardClicked = {index: null, card:null, line:null}
+    emit("update:cardClicked", newInfoCardClicked)
+    return
+  }
+  const newInfoCardClicked = {index: index, card: card, line: line}
+  emit("update:cardClicked", newInfoCardClicked)
+
+  await nextTick()
+  console.log(props.cardClicked)
 }
 
 </script>
@@ -42,7 +57,7 @@ const addCardInSlot = (index, line) => {
         :key="index"
         class="mx-4 flex justify-center items-center h-full w-[75px]"
       >
-        <Card v-if="card?.description" :cardInfo="card"/>
+        <Card v-if="card?.description" :cardInfo="card" @click="clickInCard(index, card, 'front')"/>
         <div 
           v-else 
           @click="addCardInSlot(index, 'front')"
@@ -59,7 +74,7 @@ const addCardInSlot = (index, line) => {
         :key="index"
         class="mx-4 flex justify-center items-center h-full w-[75px]"
       >
-        <Card v-if="card?.description" :cardInfo="card"/>
+        <Card v-if="card?.description" :cardInfo="card" @click="clickInCard(index, card, 'back')"/>
         <div 
           v-else 
           @click="addCardInSlot(index, 'back')"
