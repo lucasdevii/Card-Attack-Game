@@ -4,42 +4,55 @@ import { registerSchema, loginSchema } from './auth.schema.js';
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
 
-export const register = asyncHandler(async (req, res, next) => {
-    const { name, email, password } = req.body;
-
-    const existingUser = await getUserByEmail(email);
-    if (existingUser) {
-        return res.status(400).json({ message: 'Email já está em uso.' });
-    }
-
-    const passwordHashed = await bcrypt.hash(password, Number(process.env.BCRYPT_ROUNDS || 10));
-
-    const user = await createUser(name, email, passwordHashed);
-
-    if(!process.env.JWT_SECRET) {
-        return res.status(500).json({ message: 'Erro interno do servidor.' });
-    }
-
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-    const safeUser = {
-        name: user.name,
-        email: user.email,
-    }
-
-    return res.status(201)
-      .cookie('token', token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
-        maxAge: 7 * 24 * 60 * 60 * 1000
-      })
-      .json({
-        safeUser,
-        message: 'Usuário criado com sucesso!',
-      });
+export const getCurrentUser = asyncHandler(async (req, res) => {
+  const id = req.user.id;
+  const user = await getUserById(id);
+  if (!user) {
+    return res.status(404).json({ message: 'Usuário não encontrado.' });
+  }
+  const safeUser = {
+    name: user.name,
+    email: user.email,
+  };
+  return res.status(200).json({ user: safeUser });
 });
 
-export const login = asyncHandler(async (req, res, next) => {
+export const register = asyncHandler(async (req, res) => {
+  const { name, email, password } = req.body;
+
+  const existingUser = await getUserByEmail(email);
+  if (existingUser) {
+      return res.status(400).json({ message: 'Email já está em uso.' });
+  }
+
+  const passwordHashed = await bcrypt.hash(password, Number(process.env.BCRYPT_ROUNDS || 10));
+
+  const user = await createUser(name, email, passwordHashed);
+
+  if(!process.env.JWT_SECRET) {
+      return res.status(500).json({ message: 'Erro interno do servidor.' });
+  }
+
+  const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+  const safeUser = {
+      name: user.name,
+      email: user.email,
+  }
+
+  return res.status(201)
+    .cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    })
+    .json({
+      safeUser,
+      message: 'Usuário criado com sucesso!',
+    });
+});
+
+export const login = asyncHandler(async (req, res) => {
     if(!process.env.JWT_SECRET) {
         return res.status(500).json({ message: 'Erro interno do servidor.' });
     }
