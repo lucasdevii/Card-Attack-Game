@@ -5,6 +5,7 @@ import PerfilInformation from '@/components/layouts/gameTable/PerfilInformation.
 import Hand from '@/components/layouts/gameTable/Hand.vue';
 import { getCards } from '@/services/CardService';
 import { onMounted, onUnmounted, ref } from 'vue';
+import { user } from '@/composables/useAuth';
 
 const cardLimit = 3;
 const infosBase = {index: null, card: null, line: null}
@@ -54,7 +55,7 @@ onUnmounted(() => {
         v-model:currentCards="currentCards"
       />
       <div class="absolute bottom-0 right-0">
-        <PerfilInformation/>
+        <PerfilInformation :name="user.name"/>
       </div>
     </div>
 

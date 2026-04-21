@@ -30,7 +30,7 @@ const clickInCard = (index) => {
             @click="clickInCard(index)"
             class="card-wrapper transition-transform duration-500 ease-in-out cursor-pointer pointer-events-auto"
             style="width: 140px"
-            :class="props.cardClicked.index === index
+            :class="props.cardClicked.index === index && props.cardClicked.line === 'hand'
               ? 'translate-y-[-200px] scale-105 z-50'
               : 'hover:-translate-y-10'"
           >

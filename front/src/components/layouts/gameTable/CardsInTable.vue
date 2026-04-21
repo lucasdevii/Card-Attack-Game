@@ -57,12 +57,17 @@ const clickInCard = async (index, card, line) => {
         :key="index"
         class="mx-4 flex justify-center items-center h-full w-[75px]"
       >
-        <Card v-if="card?.description" :cardInfo="card" @click="clickInCard(index, card, 'front')"/>
+        <Card 
+          v-if="card?.description" 
+          :cardInfo="card" @click="clickInCard(index, card, 'front')"
+          :class="props.cardClicked?.index == index && props.cardClicked?.line == 'front' ?
+            'shadow-[0_0_15px_rgba(251,191,36,0.5)] shadow-cyan-700':''" 
+        />
         <div 
           v-else 
           @click="addCardInSlot(index, 'front')"
           class="bg-gray-800 w-full h-full flex justify-center items-center rounded-md cursor-pointer hover:scale-105 transition-transform"
-          :class="cardClicked?.index != null? 'shadow-[0_0_15px_rgba(251,191,36,0.5)] shadow-amber-200':''"
+          :class="props.cardClicked?.index != null && props.cardClicked?.line == 'hand' ? 'shadow-[0_0_15px_rgba(251,191,36,0.5)] shadow-amber-200':''"
         >
           Vazio
         </div>
@@ -74,12 +79,17 @@ const clickInCard = async (index, card, line) => {
         :key="index"
         class="mx-4 flex justify-center items-center h-full w-[75px]"
       >
-        <Card v-if="card?.description" :cardInfo="card" @click="clickInCard(index, card, 'back')"/>
+        <Card 
+          v-if="card?.description" 
+          :cardInfo="card" @click="clickInCard(index, card, 'back')"
+          :class="props.cardClicked?.index == index && props.cardClicked?.line == 'back' ?
+            'shadow-[0_0_15px_rgba(251,191,36,0.5)] shadow-cyan-700':''" 
+        />
         <div 
           v-else 
           @click="addCardInSlot(index, 'back')"
           class="bg-gray-800 w-full h-full flex justify-center items-center rounded-md cursor-pointer hover:scale-105 transition-transform"
-          :class="cardClicked?.index != null? 'shadow-[0_0_15px_rgba(251,191,36,0.5)] shadow-amber-200':''"
+          :class="props.cardClicked?.index != null && props.cardClicked?.line == 'hand' ? 'shadow-[0_0_15px_rgba(251,191,36,0.5)] shadow-amber-200':''"
         >
           Vazio
         </div>
