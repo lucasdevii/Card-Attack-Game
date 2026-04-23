@@ -1,2 +1,9 @@
-<script setup></script>
-<template></template>
+<script setup>
+import SideBar from '@/components/ui/SideBar.vue';
+</script>
+<template>
+    <SideBar/>
+    <div>
+
+    </div>
+</template>
