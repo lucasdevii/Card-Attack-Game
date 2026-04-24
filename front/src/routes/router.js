@@ -1,15 +1,13 @@
 import { createWebHistory, createRouter } from 'vue-router'
 
-import GameTable from '@/views/GameTable.vue'
 import Register from '@/views/auth/Register.vue'
 import Login from '@/views/auth/Login.vue'
 import Dashboard from '@/views/Dashboard.vue'
 
 const routes = [
-  { path: '/', component: Dashboard },
-  { path: '/Register', component: Register },
-  { path: '/Login', component: Login },
-  { path: '/GameTable', component: GameTable }
+  { path: '/game', component: Dashboard },
+  { path: '/register', component: Register },
+  { path: '/login', component: Login },
 ]
 
 export const router = createRouter({

@@ -6,20 +6,24 @@ import ButtonWithIcon from './form/ButtonWithIcon.vue';
 import CardsDeck from './icons/CardsDeck.vue';
 import Icon from './Icon.vue';
 
-const isExpanded = ref(true);
+const props = defineProps({
+    currentSection: Number,
+    sections: Object,
+    sideIsExpanded: Boolean
+})
+
+const emit = defineEmits(['update:currentSection', 'update:sideIsExpanded'])
+
+const isExpanded = ref(props.sideIsExpanded);
 const isDarkMode = ref(true);
 
-const sections = {
-    'game' : 1,
-    'decks' : 2,
-    'community' : 3,
-    'config' : 4
-}
+const sections = props.sections
 
-const currentSection = ref(sections.game);
+const currentSection = ref(props.currentSection);
 
 const toggleSidebar = () => {
     isExpanded.value = !isExpanded.value;
+    emit('update:sideIsExpanded', isExpanded.value);
 };
 
 const toggleDarkMode = () => {
@@ -27,27 +31,27 @@ const toggleDarkMode = () => {
 };
 
 const changeSection = (section) => {
-    currentSection.value = section
+    emit('update:currentSection', section);
 }
 
 </script>
 <template>
-    <div :class="isExpanded ? 'w-60' : 'w-24'" class="fixed left-0 top-0 h-full bg-slate-950 text-slate-100 shadow-2xl shadow-slate-950/30 transition-all duration-300">
-        <div class="relative flex h-full flex-col justify-between">
-            <button @click="toggleSidebar" class="absolute -right-4 top-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-slate-800 shadow-lg shadow-black/20 transition-colors hover:bg-slate-700">
+    <div :class="isExpanded ? 'w-60' : 'w-20'" class="fixed left-0 top-0 h-full bg-slate-950 text-slate-100 shadow-2xl shadow-slate-950/30 transition-all duration-300">
+        <div 
+            class="relative flex h-full flex-col justify-between" 
+        >
+            <button @click="toggleSidebar" class="z-50 absolute -right-4 top-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-slate-800 shadow-lg shadow-black/20 transition-colors hover:bg-slate-700">
                 <Icon :icon="isExpanded ? faChevronLeft : faChevronRight" class="h-4 w-4" />
             </button>
 
             <div class="space-y-3 px-4 pt-5">
-                <div class="flex items-center justify-between hover:bg-slate-800 cursor-pointer rounded-3xl">
-                    <div class="flex items-center gap-3 p-2">
-                        <div class="flex h-12 w-12 items-center justify-center rounded-3xl bg-indigo-500 text-white shadow-lg shadow-indigo-500/20">
-                            <span class="text-lg font-bold">{{ user.name[0] }}</span>
-                        </div>
-                        <div v-if="isExpanded" class="space-y-1">
-                            <p class="text-lg font-semibold">{{ user.name }}</p>
-                            <p class="text-xs text-slate-400">Informações</p>
-                        </div>
+                <div :class="['flex items-center hover:bg-slate-800 cursor-pointer rounded-3xl transition-all duration-300', isExpanded ? 'justify-start gap-3 p-2' : 'justify-center px-2']">
+                    <div class="flex h-12 w-12 items-center justify-center rounded-3xl bg-indigo-500 text-white shadow-lg shadow-indigo-500/20 flex-shrink-0">
+                        <span class="text-lg font-bold">{{ user.name[0] }}</span>
+                    </div>
+                    <div v-if="isExpanded" class="space-y-1">
+                        <p class="text-lg font-semibold">{{ user.name }}</p>
+                        <p class="text-xs text-slate-400">Informações</p>
                     </div>
                 </div>
 
