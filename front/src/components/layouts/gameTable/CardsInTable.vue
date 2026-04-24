@@ -1,6 +1,6 @@
 <script setup>
 import { nextTick } from 'vue';
-import Card from '@/components/layouts/gameTable/Card.vue';
+import Card from '@/components/ui/cards/Card.vue';
 
 const props = defineProps({
   cardsDispatched: {type: Object},

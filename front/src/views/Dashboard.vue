@@ -1,4 +1,5 @@
 <script setup>
+import Cards from '@/components/layouts/Cards.vue';
 import GameTable from '@/components/layouts/GameTable.vue';
 import SideBar from '@/components/ui/SideBar.vue';
 import { ref } from 'vue';
@@ -9,8 +10,9 @@ const sections = {
     'community' : 3,
     'config' : 4
 }
-const sideIsExpanded = ref(true);
 const currentSection = ref(sections.game);
+
+const sideIsExpanded = ref(true);
 </script>
 <template>
     <div class="flex h-screen w-screen">
@@ -24,7 +26,8 @@ const currentSection = ref(sections.game);
             class="flex-1 duration-300 transition-all overflow-hidden"
             :class="sideIsExpanded? 'pl-60':'pl-20'"
         >
-            <GameTable/>
+            <GameTable v-if="currentSection == sections.game"/>
+            <Cards v-if="currentSection == sections.decks"/>
         </div>
     </div>
 </template>

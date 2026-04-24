@@ -4,7 +4,7 @@ import { ref, watch } from 'vue';
 import { faUserGroup, faGamepad, faGear, faChevronLeft, faChevronRight, faSearch, faMoon } from '@fortawesome/free-solid-svg-icons';
 import ButtonWithIcon from './form/ButtonWithIcon.vue';
 import CardsDeck from './icons/CardsDeck.vue';
-import Icon from './Icon.vue';
+import Icon from '../utils/Icon.vue';
 
 const props = defineProps({
     currentSection: Number,
@@ -18,8 +18,6 @@ const isExpanded = ref(props.sideIsExpanded);
 const isDarkMode = ref(true);
 
 const sections = props.sections
-
-const currentSection = ref(props.currentSection);
 
 const toggleSidebar = () => {
     isExpanded.value = !isExpanded.value;
@@ -57,14 +55,14 @@ const changeSection = (section) => {
 
 
                 <div class="space-y-3">
-                    <ButtonWithIcon text="Jogar" :icon="faGamepad" :collapsed="!isExpanded" :isActive="currentSection == sections.game" @click="changeSection(sections.game)"/>
-                    <ButtonWithIcon text="Cartas" :icon="CardsDeck" :collapsed="!isExpanded" :isActive="currentSection == sections.decks" @click="changeSection(sections.decks)"/>
-                    <ButtonWithIcon text="Comunidade" :icon="faUserGroup" :collapsed="!isExpanded" :isActive="currentSection == sections.community" @click="changeSection(sections.community)"/>
+                    <ButtonWithIcon text="Jogar" :icon="faGamepad" :collapsed="!isExpanded" :isActive="props.currentSection == sections.game" @click="changeSection(sections.game)"/>
+                    <ButtonWithIcon text="Cartas" :icon="CardsDeck" :collapsed="!isExpanded" :isActive="props.currentSection == sections.decks" @click="changeSection(sections.decks)"/>
+                    <ButtonWithIcon text="Comunidade" :icon="faUserGroup" :collapsed="!isExpanded" :isActive="props.currentSection == sections.community" @click="changeSection(sections.community)"/>
                 </div>
             </div>
 
             <div class="space-y-4 px-4 pb-6">
-                <ButtonWithIcon text="Configurações" :icon="faGear" :collapsed="!isExpanded" :isActive="currentSection == sections.config" @click="changeSection(sections.config)"/>
+                <ButtonWithIcon text="Configurações" :icon="faGear" :collapsed="!isExpanded" :isActive="props.currentSection == sections.config" @click="changeSection(sections.config)"/>
 
 
                     <div class="flex items-center gap-3">
