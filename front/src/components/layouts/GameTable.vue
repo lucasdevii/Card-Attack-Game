@@ -37,33 +37,35 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="w-screen h-screen relative overflow-hidden">
-    <DescriptionFade :cardClicked="cardClicked"/>
-    <!-- Tabuleiro Screen-->
-    <div class="relative w-full h-full bg-slate-900 flex flex-col justify-between">
-      
-      <CardsInTable :cardsDispatched="enemyCardsDispatched"/>
-      <!-- Perfil do inimigo -->
-      <div class="absolute top-0">
-        <PerfilInformation/>
+  <div class="w-full h-full">
+    <div class="relative overflow-hidden w-full h-full">
+      <DescriptionFade :cardClicked="cardClicked"/>
+      <!-- Tabuleiro Screen-->
+      <div class="relative w-full h-full bg-slate-900 flex flex-col justify-between">
+        
+        <CardsInTable :cardsDispatched="enemyCardsDispatched"/>
+        <!-- Perfil do inimigo -->
+        <div class="absolute top-0">
+          <PerfilInformation/>
+        </div>
+
+        <!-- Perfil do usuário -->
+        <CardsInTable 
+          v-model:cardsDispatched="userCardsDispatched"
+          v-model:cardClicked="cardClicked"
+          v-model:currentCards="currentCards"
+        />
+        <div class="absolute bottom-0 right-0">
+          <PerfilInformation :name="user.name"/>
+        </div>
       </div>
 
-      <!-- Perfil do usuário -->
-      <CardsInTable 
-        v-model:cardsDispatched="userCardsDispatched"
+      <!-- Cartas -->
+      <Hand
         v-model:cardClicked="cardClicked"
         v-model:currentCards="currentCards"
+        v-model:userCardsDispatched="userCardsDispatched"
       />
-      <div class="absolute bottom-0 right-0">
-        <PerfilInformation :name="user.name"/>
-      </div>
     </div>
-
-    <!-- Cartas -->
-    <Hand
-      v-model:cardClicked="cardClicked"
-      v-model:currentCards="currentCards"
-      v-model:userCardsDispatched="userCardsDispatched"
-    />
   </div>
 </template>
