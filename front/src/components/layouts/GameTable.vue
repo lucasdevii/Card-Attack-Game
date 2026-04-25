@@ -4,17 +4,32 @@ import CardsInTable from '@/components/layouts/gameTable/CardsInTable.vue';
 import PerfilInformation from '@/components/layouts/gameTable/PerfilInformation.vue';
 import Hand from '@/components/layouts/gameTable/Hand.vue';
 import { getCards } from '@/services/CardService';
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref, watch } from 'vue';
 import { user } from '@/composables/useAuth';
+
+const props = defineProps({
+  cards: {
+    type: Array,
+    required: true
+   }
+})
 
 const cardLimit = 3;
 const infosBase = {index: null, card: null, line: null}
 
-const currentCards = ref(null);
+const currentCards = ref([]);
 const cardClicked = ref({...infosBase});
 
 const enemyCardsDispatched = ref({ front: [null, null], back: [null, null, null] });
 const userCardsDispatched = ref({ front: [null, null, null], back: [null, null] });
+
+watch(
+  () => props.cards,
+  (newCards) => {
+    currentCards.value = Array.isArray(newCards) ? [...newCards] : [];
+  },
+  { immediate: true }
+);
 
 // Verifica se o mouse clicou fora da carta para resetar a descrição
 function verifyMouseInCard(event){
@@ -24,13 +39,10 @@ function verifyMouseInCard(event){
     cardClicked.value = {...infosBase};
   }
 }
+
 onMounted(async () => {
   window.addEventListener("click", verifyMouseInCard);
-
-  const cards = await getCards();
-  currentCards.value = [cards[0], cards[1], cards[2]];
 });
-
 onUnmounted(() => {
   window.removeEventListener("click", verifyMouseInCard);
 });
