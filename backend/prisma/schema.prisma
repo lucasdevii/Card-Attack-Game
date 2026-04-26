@@ -10,9 +10,11 @@ model cards {
   id          Int           @id @default(autoincrement())
   name        String        @db.VarChar(100)
   description String        @db.VarChar(255)
-  damage      Int?          @default(0)
-  health      Int?          @default(2)
-  armor       Int?          @default(0)
+  image       String        @db.VarChar(255)
+  attack      Int?          @default(0)
+  life        Int?          @default(2)
+  defense     Int?          @default(0)
+  cost        Int?          @default(0)
   users_cards users_cards[]
 }
 

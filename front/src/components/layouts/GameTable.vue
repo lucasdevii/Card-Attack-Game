@@ -2,7 +2,7 @@
 import DescriptionFade from '@/components/layouts/gameTable/DescriptionFade.vue';
 import CardsInTable from '@/components/layouts/gameTable/CardsInTable.vue';
 import PerfilInformation from '@/components/layouts/gameTable/PerfilInformation.vue';
-import Hand from '@/components/layouts/gameTable/Hand.vue';
+import Cheap from '@/components/layouts/gameTable/Cheap.vue';
 import { getCards } from '@/services/CardService';
 import { onMounted, onUnmounted, ref, watch } from 'vue';
 import { user } from '@/composables/useAuth';
@@ -73,7 +73,7 @@ onUnmounted(() => {
       </div>
 
       <!-- Cartas -->
-      <Hand
+      <Cheap
         v-model:cardClicked="cardClicked"
         v-model:currentCards="currentCards"
         v-model:userCardsDispatched="userCardsDispatched"
