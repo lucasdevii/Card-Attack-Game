@@ -58,3 +58,47 @@ export const passwordMatches = async (hashedPassword, password) => {
         throw error;
     }
 }
+
+/**
+ * 
+ * @param {Integer} userId 
+ * @param {Array<Integer>} cardId 
+ */
+export const linkUserToCard = async (userId, cardId, tx = prisma) => {
+    const existingUser = await tx.users.findUnique({
+        where: { id: userId }
+    });
+
+    if (!existingUser) {
+        const error = new Error("Usuário não encontrado");
+        error.status = 404;
+        throw error;
+    }
+
+    const filteredCardIds = [...new Set(cardId)];
+
+    const existingCards = await tx.cards.findMany({
+        where: {
+            id: {
+                in: filteredCardIds
+            }
+        }
+    });
+
+    if (existingCards.length !== filteredCardIds.length) {
+        const error = new Error("Um ou mais cartões não foram encontrados");
+        error.status = 404;
+        throw error;
+    }
+
+    await tx.users.update({
+        where: { id: userId },
+        data: {
+            cards: {
+                connect: filteredCardIds.map((id) => ({
+                    id: id
+                }))
+            }
+        }
+    });
+};

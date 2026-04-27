@@ -29,7 +29,7 @@ const handleRegister = async () => {
         password: password.value,
         passwordConfirmation: passwordConfirmation.value
       });
-      router.push("/GameTable");
+      router.push("/game");
   }catch (err) {
       const errors = err.response?.data?.errors?.fieldErrors;
 
