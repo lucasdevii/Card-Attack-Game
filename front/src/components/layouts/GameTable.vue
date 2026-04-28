@@ -14,7 +14,6 @@ const props = defineProps({
    }
 })
 
-const cardLimit = 3;
 const infosBase = {index: null, card: null, line: null}
 
 const currentCards = ref([]);
@@ -62,22 +61,24 @@ onUnmounted(() => {
         </div>
 
         <!-- Perfil do usuário -->
-        <CardsInTable 
-          v-model:cardsDispatched="userCardsDispatched"
-          v-model:cardClicked="cardClicked"
-          v-model:currentCards="currentCards"
-        />
+         <div class="relative">
+          <CardsInTable 
+            v-model:cardsDispatched="userCardsDispatched"
+            v-model:cardClicked="cardClicked"
+            v-model:currentCards="currentCards"
+          />
+          <Cheap
+            class="absolute top-1/3 left-[12vw]" 
+            :userCardsDispatched="userCardsDispatched"
+            :currentCards="currentCards"
+            v-model:cardClicked="cardClicked"
+          />
+        </div>
         <div class="absolute bottom-0 right-0">
           <PerfilInformation :name="user?.name"/>
         </div>
       </div>
 
-      <!-- Cartas -->
-      <Cheap
-        v-model:cardClicked="cardClicked"
-        v-model:currentCards="currentCards"
-        v-model:userCardsDispatched="userCardsDispatched"
-      />
     </div>
   </div>
 </template>
