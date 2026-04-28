@@ -8,6 +8,7 @@ const props = defineProps({
 })
 const emit = defineEmits(['update:cardClicked']);
 
+
 const clickInCheap = () => {
   
 }
@@ -22,7 +23,7 @@ const clickInCheap = () => {
         '--final-x': `${index * -2}px`,
         '--final-y': `${index * -1}px`,
         zIndex: index,
-        animationDelay: `${index * 0.1}s`
+        animationDelay: `${index * 0.1}s`,
       }"
       @click="clickInCheap"
     >
