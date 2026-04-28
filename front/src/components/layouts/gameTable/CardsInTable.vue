@@ -6,10 +6,10 @@ import CardsStructure from '@/components/ui/cards/CardsStructure.vue';
 const props = defineProps({
   cardsDispatched: {type: Object},
   cardClicked: {type: Object},
-  currentCards: {type: Array}
+  cheap: {type: Array}
 });
 
-const emit = defineEmits(["update:cardsDispatched","update:currentCards","update:cardClicked"]);
+const emit = defineEmits(["update:cardsDispatched","update:cheap","update:cardClicked"]);
 
  /**
   * @returns void
@@ -27,9 +27,9 @@ const addCardInSlot = (index, line) => {
     updatedBoard[line][index] = selectedCard;
     emit("update:cardsDispatched", updatedBoard);
 
-    const updatedHand = [...props.currentCards];
+    const updatedHand = [...props.cheap];
     updatedHand.splice(props.cardClicked.index, 1);
-    emit("update:currentCards", updatedHand);
+    emit("update:cheap", updatedHand);
     emit("update:cardClicked", { index: null, card: null, line: null });
   }
 }
@@ -57,7 +57,7 @@ const clickInCard = async (index, card, line) => {
       <CardsStructure 
         v-model:cardsDispatched="props.cardsDispatched"
         v-model:cardClicked="props.cardClicked"
-        v-model:currentCards="props.currentCards"
+        v-model:cheap="props.cheap"
       />
       
     </div>

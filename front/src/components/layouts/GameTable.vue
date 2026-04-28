@@ -16,7 +16,7 @@ const props = defineProps({
 
 const infosBase = {index: null, card: null, line: null}
 
-const currentCards = ref([]);
+const cheap = ref([]);
 const cardClicked = ref({...infosBase});
 
 const enemyCardsDispatched = ref({ front: [null, null], back: [null, null, null] });
@@ -25,7 +25,7 @@ const userCardsDispatched = ref({ front: [null, null, null], back: [null, null] 
 watch(
   () => props.cards,
   (newCards) => {
-    currentCards.value = Array.isArray(newCards) ? [...newCards] : [];
+    cheap.value = Array.isArray(newCards) ? [...newCards] : [];
   },
   { immediate: true }
 );
@@ -65,12 +65,12 @@ onUnmounted(() => {
           <CardsInTable 
             v-model:cardsDispatched="userCardsDispatched"
             v-model:cardClicked="cardClicked"
-            v-model:currentCards="currentCards"
+            v-model:cheap="cheap"
           />
           <Cheap
             class="absolute top-1/3 left-[12vw]" 
             :userCardsDispatched="userCardsDispatched"
-            :currentCards="currentCards"
+            v-model:cheap="cheap"
             v-model:cardClicked="cardClicked"
           />
         </div>
