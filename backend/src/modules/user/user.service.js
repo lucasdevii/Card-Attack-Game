@@ -100,14 +100,11 @@ export const linkUserToCard = async (userId, cardId, tx = prisma) => {
         throw error;
     }
 
-    await tx.users.update({
-        where: { id: userId },
-        data: {
-            cards: {
-                connect: filteredCardIds.map((id) => ({
-                    id: id
-                }))
-            }
-        }
+    await tx.users_cards.createMany({
+        data: filteredCardIds.map((id) => ({
+            user_id: userId,
+            card_id: id
+        })),
+        skipDuplicates: true
     });
 };
