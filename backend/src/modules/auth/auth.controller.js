@@ -1,7 +1,5 @@
 import { createUser, getUserByEmail, getUserById, passwordMatches } from '../user/user.service.js';
 import asyncHandler from '../../middlewares/asyncHandler.js';
-import { registerSchema, loginSchema } from './auth.schema.js';
-import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
 
 export const getCurrentUser = asyncHandler(async (req, res) => {
@@ -25,9 +23,7 @@ export const register = asyncHandler(async (req, res) => {
       return res.status(400).json({ message: 'Email já está em uso.' });
   }
 
-  const passwordHashed = await bcrypt.hash(password, Number(process.env.BCRYPT_ROUNDS || 10));
-
-  const user = await createUser(name, email, passwordHashed);
+  const user = await createUser(name, email, password);
 
   if(!process.env.JWT_SECRET) {
       return res.status(500).json({ message: 'Erro interno do servidor.' });
