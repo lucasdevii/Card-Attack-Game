@@ -68,7 +68,7 @@ onUnmounted(() => {
           v-model:currentCards="currentCards"
         />
         <div class="absolute bottom-0 right-0">
-          <PerfilInformation :name="user.name"/>
+          <PerfilInformation :name="user?.name"/>
         </div>
       </div>
 
