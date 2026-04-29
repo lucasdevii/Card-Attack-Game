@@ -7,7 +7,7 @@ const props = defineProps({
 </script>
 <template>
     <div
-     class="absolute left-0 top-0 bottom-0 w-[32vw] bg-gradient-to-r from-black/80 to-transparent break-words duration-300 p-5 z-10 pointer-events-none" 
+     class="absolute left-0 top-0 bottom-0 w-[32vw] bg-gradient-to-r from-black/80 to-transparent break-words duration-300 p-5 z-20 pointer-events-none" 
      :class="props.cardClicked?.card !== null? '':'-translate-x-[200%]'"
     >
       <div>

@@ -68,7 +68,7 @@ onUnmounted(() => {
             v-model:cheap="cheap"
           />
           <Cheap
-            class="absolute top-1/3 left-[12vw]" 
+            class="absolute top-1/3 left-[12vw] z-40" 
             :userCardsDispatched="userCardsDispatched"
             v-model:cheap="cheap"
             v-model:cardClicked="cardClicked"

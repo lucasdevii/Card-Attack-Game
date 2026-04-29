@@ -5,11 +5,11 @@ import Card from './Card.vue';
 const props = defineProps({
   cardsDispatched: {type: Object},
   cardClicked: {type: Object},
-  currentCards: {type: Array},
+  cheap: {type: Array},
   position: {type: String, default: 'horizontal'} // Para reutilização em diferentes cantos
 });
 
-const emit = defineEmits(["update:cardsDispatched","update:currentCards","update:cardClicked"]);
+const emit = defineEmits(["update:cardsDispatched","update:cheap","update:cardClicked"]);
 
  /**
   * @returns void
@@ -17,23 +17,36 @@ const emit = defineEmits(["update:cardsDispatched","update:currentCards","update
   * @param line front ou back
   */
 const addCardInSlot = (index, line) => {
-  if (props.cardClicked?.index !== null && props.cardClicked?.index !== undefined) {
-    const selectedCard = props.cardClicked.card;
-    const updatedBoard = {
-      front: [...props.cardsDispatched.front],
-      back: [...props.cardsDispatched.back]
-    };
+  if (!props.cardClicked?.card) return; // Se não tiver carta selecionada, não faz nada
 
-    updatedBoard[line][index] = selectedCard;
-    emit("update:cardsDispatched", updatedBoard);
+  const selectedCard = props.cardClicked.card;
+  const updatedBoard = {
+    front: [...props.cardsDispatched.front],
+    back: [...props.cardsDispatched.back]
+  };
 
-    const updatedHand = [...props.currentCards];
+  updatedBoard[line][index] = selectedCard;
+  emit("update:cardsDispatched", updatedBoard);
+
+  const updatedHand = [...props.cheap];
+  if (props.cardClicked?.line === 'cheap') {
+    const cardIndex = updatedHand.findIndex(c => c?.id === selectedCard?.id);
+    if (cardIndex !== -1) {
+      updatedHand.splice(cardIndex, 1);
+    }
+  } else if (props.cardClicked?.index !== null && props.cardClicked?.index !== undefined) {
     updatedHand.splice(props.cardClicked.index, 1);
-    emit("update:currentCards", updatedHand);
-    emit("update:cardClicked", { index: null, card: null, line: null });
   }
+  emit("update:cheap", updatedHand);
+  emit("update:cardClicked", { index: null, card: null, line: null });
 }
 
+ /**
+  * @returns void
+  * @param index do slot de carta
+  * @param line front ou back
+  * @param card objeto da carta clicada
+  */
 const clickInCard = async (index, card, line) => {
   //Se for a mesma carta clicada duas vezes tira
   if(props.cardClicked.index == index && props.cardClicked.line == line){
@@ -68,7 +81,7 @@ const clickInCard = async (index, card, line) => {
           v-else 
           @click="addCardInSlot(index, 'front')"
           class="bg-gray-800 w-full h-full flex justify-center items-center rounded-md cursor-pointer hover:scale-105 transition-transform"
-          :class="props.cardClicked?.index != null && props.cardClicked?.line == 'hand' ? 'shadow-[0_0_15px_rgba(251,191,36,0.5)] shadow-amber-200':''"
+          :class="props.cardClicked?.index != null && (props.cardClicked?.line != 'front' && props.cardClicked?.line != 'back') ? 'shadow-[0_0_15px_rgba(251,191,36,0.5)] shadow-amber-200':''"
         >
           Vazio
         </div>
@@ -91,7 +104,7 @@ const clickInCard = async (index, card, line) => {
           v-else 
           @click="addCardInSlot(index, 'back')"
           class="bg-gray-800 w-full h-full flex justify-center items-center rounded-md cursor-pointer hover:scale-105 transition-transform"
-          :class="props.cardClicked?.index != null && props.cardClicked?.line == 'hand' ? 'shadow-[0_0_15px_rgba(251,191,36,0.5)] shadow-amber-200':''"
+          :class="props.cardClicked?.index != null && (props.cardClicked?.line != 'front' && props.cardClicked?.line != 'back') ? 'shadow-[0_0_15px_rgba(251,191,36,0.5)] shadow-amber-200':''"
         >
           Vazio
         </div>

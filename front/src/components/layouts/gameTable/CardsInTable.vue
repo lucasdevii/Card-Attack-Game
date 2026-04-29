@@ -55,9 +55,12 @@ const clickInCard = async (index, card, line) => {
     <div class="w-full flex justify-center h-[270px]">
 
       <CardsStructure 
-        v-model:cardsDispatched="props.cardsDispatched"
-        v-model:cardClicked="props.cardClicked"
-        v-model:cheap="props.cheap"
+        :cardsDispatched="props.cardsDispatched"
+        :cardClicked="props.cardClicked"
+        :cheap="props.cheap"
+        @update:cardsDispatched="event => emit('update:cardsDispatched', event)"
+        @update:cardClicked="event => emit('update:cardClicked', event)"
+        @update:cheap="event => emit('update:cheap', event)"
       />
       
     </div>
