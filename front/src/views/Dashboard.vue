@@ -1,9 +1,13 @@
 <script setup>
-import Cards from '@/components/layouts/Cards.vue';
-import {getCards} from '@/services/CardService.js';
-import GameTable from '@/components/layouts/GameTable.vue';
-import SideBar from '@/components/ui/SideBar.vue';
 import { onMounted, ref } from 'vue';
+
+import Cards from '@/components/layouts/Cards.vue';
+import Game from '@/components/layouts/Game.vue';
+import SideBar from '@/components/ui/SideBar.vue';
+
+import {getCards} from '@/services/CardService.js';
+
+
 
 // Lógica para controle de seções e sidebar
 const sideIsExpanded = ref(true);
@@ -35,7 +39,7 @@ onMounted(async () => {
             class="flex-1 duration-300 transition-all overflow-x-hidden"
             :class="sideIsExpanded? 'pl-60':'pl-20'"
         >
-            <GameTable v-if="currentSection == sections.game" :cards="cards"/>
+            <Game v-if="currentSection == sections.game" :cards="cards"/>
             <Cards v-if="currentSection == sections.decks" :cards="cards"/>
         </div>
     </div>
