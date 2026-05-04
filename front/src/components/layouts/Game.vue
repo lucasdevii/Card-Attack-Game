@@ -58,50 +58,43 @@ const leaveGame = () => {
 </script>
 
 <template>
-    <div class="flex h-screen bg-slate-950 text-slate-100">
+    <div class="h-screen flex bg-slate-950 text-slate-100">
         <!-- Procurar Jogo -->
-        <div v-if="!inGame" class="flex w-full">
-        <!-- Informações do Usuário -->
-        <div class="w-64 p-5 bg-slate-900 border-r border-slate-700">
-            <div class="mb-5">
-            <h3 class="text-lg font-semibold">{{ user?.name || 'Usuário' }}</h3>
-            <p class="text-sm text-slate-400">Email: {{ user?.email || 'email@example.com' }}</p>
-            </div>
-            <div class="text-center">
-            <h4 class="text-sm font-medium text-slate-300">Day Strike</h4>
-            <p class="text-2xl font-bold text-indigo-400">{{ dayStrike }} dias consecutivos</p>
-            </div>
-        </div>
-
-        <!-- Procurar Jogo -->
-        <div class="flex-1 p-5">
-            <h1 class="text-2xl font-bold mb-5">Procurar Jogo</h1>
-            <div class="flex gap-5">
-            <!-- Jogos Disponíveis -->
-            <div class="flex-1 p-5 border border-slate-700 rounded-md bg-slate-800">
-                <h2 class="text-lg font-semibold mb-4">Jogos Disponíveis</h2>
-                <div class="w-60">
-                    <ButtonWithIcon @click="createGame" text="Criar Novo Jogo" :icon="faPlus"/>
+        <div v-if="!inGame" class="flex flex-col w-full">
+            <!-- Informações do Usuário -->
+            <div class="w-full p-5 bg-slate-900 border-r border-slate-700">
+                <div class="">
+                <p class="text-sm text-slate-400">Email: {{ user?.email || 'email@example.com' }}</p>
                 </div>
-                <div class="mt-5 space-y-3">
-                <div v-for="game in availableGames" :key="game.id" class="border border-slate-600 p-3 cursor-pointer bg-slate-700 rounded hover:bg-slate-600 transition-colors" @click="joinGame(game)">
-                    <p class="font-semibold"><strong>{{ game.name }}</strong></p>
-                    <p class="text-sm text-slate-400">Jogadores: {{ game.players.length }}/4</p>
-                    <p class="text-sm text-slate-400">Status: {{ game.status }}</p>
-                </div>
-                <p v-if="availableGames.length === 0" class="text-slate-400">Nenhum jogo disponível. Crie um novo!</p>
+                <div class="text-center">
+                <h4 class="text-sm font-medium text-slate-300">Day Strike</h4>
+                <p class="text-2xl font-bold text-indigo-400">{{ dayStrike }} dias consecutivos</p>
                 </div>
             </div>
 
-            <!-- Jogar com Amigos -->
-            <div class="flex-1 p-5 border border-slate-700 rounded-md bg-slate-800">
-                <h2 class="text-lg font-semibold mb-4">Jogar com Amigos</h2>
-                <input v-model="friendCode" type="text" placeholder="Código do amigo ou ID" class="w-full p-2.5 mb-2.5 border border-slate-600 rounded bg-slate-700 text-slate-100 placeholder-slate-400 focus:border-indigo-500 focus:outline-none">
-                <button @click="joinFriendGame" class="bg-indigo-500 hover:bg-indigo-600 text-white px-5 py-2 border-none rounded cursor-pointer mb-5 disabled:bg-slate-600 disabled:cursor-not-allowed transition-colors" :disabled="!friendCode">Entrar no Jogo do Amigo</button>
-                <p class="text-xs text-slate-400">Compartilhe seu código: {{ user?.id || 'SeuID' }}</p>
+            <!-- Procurar Jogo -->
+            <div class="w-full p-5">
+                <h1 class="text-2xl font-bold mb-5">Procurar Jogo</h1>
+                <div class="flex gap-4">
+                    <!-- Jogos Disponíveis -->
+                    <div class="flex-1 flex flex-col justify-between p-5 border border-slate-700 rounded-md bg-slate-800">
+                        <div class="w-60">
+                            <button class="button-primary" @click="createGame">Jogar</button>
+                        </div>
+                        <div class=" space-y-3">
+                            <h1 class="text-2xl text-gold font-semibold">ELO: {{ user?.elo || 1000 }}</h1>
+                        </div>
+                    </div>
+
+                    <!-- Jogar com Amigos -->
+                    <div class="flex-1 p-5 border border-slate-700 rounded-md bg-slate-800">
+                        <h2 class="text-lg font-semibold mb-4">Juntar-se</h2>
+                        <input v-model="friendCode" type="text" placeholder="Código do amigo ou ID" class="w-full p-2.5 mb-2.5 border border-slate-600 rounded bg-slate-700 text-slate-100 placeholder-slate-400 focus:border-indigo-500 focus:outline-none">
+                        <button @click="joinFriendGame" class="button-primary" :disabled="!friendCode">Entrar</button>
+                        <p class="text-xs text-slate-400 mt-1">Compartilhe seu código: {{ user?.id || 'SeuID' }}</p>
+                    </div>
+                </div>
             </div>
-            </div>
-        </div>
         </div>
 
         <!-- Mesa de Jogo -->
