@@ -11,8 +11,9 @@ export const getCurrentUser = asyncHandler(async (req, res) => {
   const safeUser = {
     name: user.name,
     email: user.email,
+    cards: user.users_cards
   };
-  return res.status(200).json({ user: safeUser });
+  return res.status(200).json({ user: safeUser});
 });
 
 export const register = asyncHandler(async (req, res) => {

@@ -40,7 +40,12 @@ export const getUserByEmail = async (email) => {
 
 export const getUserById = async (id) => {
     try {
-        const user = await prisma.users.findUnique({ where: { id } });
+        const user = await prisma.users.findUnique({ where: { id }, 
+            include: { users_cards: {
+                include: { cards: true }
+             } 
+            } 
+        });
         return user;
     } catch (error) {
         console.error('Erro ao buscar usuário por ID:', error);
