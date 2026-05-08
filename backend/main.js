@@ -1,4 +1,5 @@
 import { errorHandler } from "./src/middlewares/errorHandler.js"
+import { connectRedis } from "./database/redis.js"
 import express from "express"
 import cors from "cors"
 import dotenv from "dotenv"
@@ -8,9 +9,10 @@ import authRoutes from "./src/modules/auth/auth.routes.js"
 import cardRoutes from "./src/modules/card/card.routes.js"
 
 import path from "path"
-import {fileURLToPath} from "url"
+import { fileURLToPath } from "url"
 
 dotenv.config();
+await connectRedis();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

@@ -1,4 +1,4 @@
-import cards from '../../src/mocks/cards.json' with { type: 'json' }
+import cards from '../../../src/mocks/cards.json' with { type: 'json' }
 import { prisma } from '../client.js'
 
 const main = async () => {

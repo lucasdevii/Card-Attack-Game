@@ -1,4 +1,4 @@
-import { prisma } from "../../../prisma/client.js";
+import { prisma } from "../../../database/prisma/client.js";
 import bcrypt from 'bcrypt';
 
 export const createUser = async (name, email, password) => {
