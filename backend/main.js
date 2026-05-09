@@ -7,6 +7,7 @@ import cookiesParser from "cookie-parser"
 import userRoutes from "./src/modules/user/user.routes.js"
 import authRoutes from "./src/modules/auth/auth.routes.js"
 import cardRoutes from "./src/modules/card/card.routes.js"
+import gameRoutes from "./src/modules/game/game.routes.js"
 
 import path from "path"
 import { fileURLToPath } from "url"
@@ -29,6 +30,7 @@ app.use("/assets", express.static(path.join(__dirname, "src/public"))); //Pega a
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/cards", cardRoutes);
+app.use("/api/game", gameRoutes);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 8000;
