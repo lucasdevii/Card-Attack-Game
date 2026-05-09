@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { isAuth } from '../../middlewares/auth.middleware';
-import { seekingGame, seekingGameStop } from './game.controller';
+import { isAuth } from '../../middlewares/auth.middleware.js';
+import { gameSearch, gameSearchStop } from './game.controller.js';
 
 const router = Router();
 
-router.post('/matchmaking/search', isAuth, seekingGame)
-router.delete('/mathmaking/search', isAuth, seekingGame)
+router.post('/matchmaking/search', isAuth, gameSearch)
+router.delete('/mathmaking/search', isAuth, gameSearchStop)
 
 
 export default router;

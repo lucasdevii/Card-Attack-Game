@@ -8,6 +8,7 @@ const api = axios.create({
 export const searchGame = async () => {
     try{
         const res = await api.post('/search')
+        console.log(res.data)
         return res
     }catch(err){
         console.log(err)
