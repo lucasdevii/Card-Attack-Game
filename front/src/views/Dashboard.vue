@@ -2,10 +2,10 @@
 import { onMounted, ref } from 'vue';
 
 import Cards from '@/components/layouts/Cards.vue';
-import Game from '@/components/layouts/Game.vue';
 import SideBar from '@/components/ui/SideBar.vue';
 
 import {getCards} from '@/services/CardService.js';
+import Matchmaking from '@/components/layouts/Matchmaking.vue';
 
 
 
@@ -39,7 +39,7 @@ onMounted(async () => {
             class="flex-1 duration-300 transition-all overflow-x-hidden"
             :class="sideIsExpanded? 'pl-60':'pl-20'"
         >
-            <Game v-if="currentSection == sections.game" :cards="cards"/>
+            <Matchmaking v-if="currentSection == sections.game" :cards="cards"/>
             <Cards v-if="currentSection == sections.decks" :cards="cards"/>
         </div>
     </div>
