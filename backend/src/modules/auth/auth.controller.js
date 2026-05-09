@@ -91,3 +91,14 @@ export const login = asyncHandler(async (req, res) => {
       })
       .json({ message: 'Login realizado com sucesso!' });
 });
+
+export const userCadaster = async (req, res, next) => {
+    try {
+        const validatedData = userSchema.parse(req.body);
+        const { username, email, password } = validatedData;
+        await createUser(username, email, password);
+        res.status(201).json({ message: "Usuário criado com sucesso!" });
+    } catch (error) {
+        next(error);
+    }
+};
