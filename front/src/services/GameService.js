@@ -1,13 +1,13 @@
 import axios from "axios"
 
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
+    baseURL: import.meta.env.VITE_API_URL + '/game',
     withCredentials: true
 })
 
 export const searchGame = async () => {
     try{
-        const res = await api.post('/search')
+        const res = await api.post('/matchmaking/search')
         console.log(res.data)
         return res
     }catch(err){

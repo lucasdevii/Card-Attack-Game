@@ -5,50 +5,24 @@ import ButtonWithIcon from '../ui/form/ButtonWithIcon.vue';
 import { getCards } from '@/services/CardService';
 import { user } from '@/composables/useAuth';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { searchGame } from '@/services/GameService';
 
 const inGame = ref(false);
 const gameCards = ref([]);
 const friendCode = ref('');
 const dayStrike = ref(5); // Mockado
 
-const availableGames = ref([
-    // Mock data
-    { id: 1, name: 'Sala 1', players: ['Player1'], status: 'Aguardando' },
-    { id: 2, name: 'Sala 2', players: ['Player1', 'Player2'], status: 'Em andamento' },
-
-]);
-
-const createGame = () => {
-    // Simular criação de jogo
-    const newGame = { 
-        id: Date.now(), 
-        name: `Sala ${availableGames.value.length + 1}`, 
-        players: [user.value?.name || 'Você'], 
-        status: 'Aguardando' };
-    availableGames.value.push(newGame);
-    joinGame(newGame);
+const callSearchGame = async () => {
+    const res = await searchGame()
+    console.log(res)
 };
 
 const joinGame = async (game) => {
-    // Simular entrada no jogo
-    inGame.value = true;
-    // Buscar cartas para o jogo
-    try {
-        const cards = await getCards();
-        gameCards.value = cards.slice(0, 10); // Pegar primeiras 10 cartas como exemplo
-    } catch (error) {
-        console.error('Erro ao buscar cartas:', error);
-        gameCards.value = []; // Fallback
-    }
+
 };
 
 const joinFriendGame = () => {
-    // Simular entrada no jogo do amigo
-    if (friendCode.value) {
-        // Mock: Criar um jogo com amigo
-        const friendGame = { id: Date.now(), name: `Jogo com ${friendCode.value}`, players: [user.value?.name || 'Você', friendCode.value], status: 'Em andamento' };
-        joinGame(friendGame);
-    }
+
 };
 
 const leaveGame = () => {
@@ -79,7 +53,7 @@ const leaveGame = () => {
                     <!-- Jogos Disponíveis -->
                     <div class="flex-1 flex flex-col justify-between p-5 border border-slate-700 rounded-md bg-slate-800">
                         <div class="w-60">
-                            <button class="button-primary" @click="createGame">Jogar</button>
+                            <button class="button-primary" @click="callSearchGame">Jogar</button>
                         </div>
                         <div class=" space-y-3">
                             <h1 class="text-2xl text-gold font-semibold">ELO: {{ user?.elo || 1000 }}</h1>
