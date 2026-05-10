@@ -8,9 +8,20 @@ const api = axios.create({
 export const searchGame = async () => {
     try{
         const res = await api.post('/matchmaking/search')
-        console.log(res.data)
-        return res
+        if(res.status == 200 || 201){
+            return {
+                sucess: true,
+                message: res.data.message
+            }
+        }
+        return {
+            sucess: false,
+            message: res.data.message
+        }
     }catch(err){
-        console.log(err)
+        return {
+            sucess: false,
+            message: err.response?.data || "Erro interno no servidor."
+        }
     }
 }

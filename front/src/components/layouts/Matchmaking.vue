@@ -8,6 +8,7 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { searchGame } from '@/services/GameService';
 
 const inGame = ref(false);
+const inSearchingGame = ref(false);
 const gameCards = ref([]);
 const friendCode = ref('');
 const dayStrike = ref(5); // Mockado
@@ -15,10 +16,9 @@ const dayStrike = ref(5); // Mockado
 const callSearchGame = async () => {
     const res = await searchGame()
     console.log(res)
-};
-
-const joinGame = async (game) => {
-
+    if(res.status == 200){
+        inSearchingGame.value = true
+    }
 };
 
 const joinFriendGame = () => {
