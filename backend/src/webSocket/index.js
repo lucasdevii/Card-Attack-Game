@@ -1,4 +1,6 @@
 import { Server } from 'socket.io'
+import { matchMaking } from './handlers/matchMaking.handler.js';
+import { isAuthWs } from './middleware.js';
 
 export let io
 
@@ -10,8 +12,12 @@ export const initSocket = (server) => {
         }
     });
 
+    io.use(isAuthWs);
+
     io.on('connection', (socket) => {
-        console.log('Usuário conectado')
+        console.log('Usuário conectado', socket)
+
+        matchMaking(socket)
 
         socket.on('disconnect', () => {
             console.log('Usuário desconectado');

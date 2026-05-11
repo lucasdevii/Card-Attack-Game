@@ -1,11 +1,9 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import Table from '@/components/layouts/gameTable/Table.vue';
-import ButtonWithIcon from '../ui/form/ButtonWithIcon.vue';
-import { getCards } from '@/services/CardService';
 import { user } from '@/composables/useAuth';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { searchGame } from '@/services/GameService';
+import { socket } from '@/services/webSocket/socket';
 
 const inGame = ref(false);
 const inSearchingGame = ref(false);
@@ -14,11 +12,7 @@ const friendCode = ref('');
 const dayStrike = ref(5); // Mockado
 
 const callSearchGame = async () => {
-    const res = await searchGame()
-    console.log(res)
-    if(res.status == 200){
-        inSearchingGame.value = true
-    }
+    socket.emit('search-game')
 };
 
 const joinFriendGame = () => {
