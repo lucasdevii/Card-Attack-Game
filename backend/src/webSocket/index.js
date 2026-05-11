@@ -15,7 +15,7 @@ export const initSocket = (server) => {
     io.use(isAuthWs);
 
     io.on('connection', (socket) => {
-        console.log('Usuário conectado', socket)
+        console.log('Usuário conectado', socket.id)
 
         matchMaking(socket)
 
