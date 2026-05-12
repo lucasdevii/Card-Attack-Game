@@ -15,6 +15,8 @@ const callSearchGame = async () => {
     socket.emit('search-game')
 };
 
+
+
 const joinFriendGame = () => {
 
 };
@@ -23,6 +25,17 @@ const leaveGame = () => {
     inGame.value = false;
     gameCards.value = [];
 };
+
+onMounted(() => {
+    socket.on(
+        'match-found',
+        (data) => {
+
+            console.log(data);
+
+        }
+    );
+})
 </script>
 
 <template>

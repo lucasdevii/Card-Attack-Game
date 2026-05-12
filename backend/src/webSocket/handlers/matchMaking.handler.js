@@ -1,41 +1,141 @@
-import { getUserById } from "../../modules/user/user.service.js"
-import asyncHandler from "../../middlewares/asyncHandler.js"
-import redisClient from "../../../database/redis.js"
+import crypto from 'crypto';
+import redisClient from '../../../database/redis.js';
 
+import { getUserById } from '../../modules/user/user.service.js';
+
+import { usersOnline, io } from '../index.js';
+import { asyncHandler } from '../middleware.js';
 
 export const matchMaking = (socket) => {
+
     socket.on('search-game', asyncHandler(async () => {
-        const userId = socket.user.id
-        const user = await getUserById(userId)
-        
-        //Logica do elo
-        const usersSearching = await redisClient.zRangeWithScores("matchmaking", user.elo - 100, user.elo + 100)
 
-        // Entra no if não caso achar um outro usuário que esteja procurando matches
-        if(usersSearching.length <= 1){ 
-            await redisClient.zAdd("matchmaking", {
-                score: user.elo,
-                value: String(user.id)
-            })
-            console.log("Procurando partida...")
-            return
+        const userId = socket.user.id;
+
+        const user = await getUserById(userId);
+
+        // Busca jogadores próximos do elo
+        const usersSearching =
+            await redisClient.zRangeByScoreWithScores(
+                'matchmaking',
+                user.elo - 100,
+                user.elo + 100
+            );
+
+        // Remove o próprio usuário
+        const filteredUsers =
+            usersSearching.filter(
+                (player) =>
+                    player.value !== String(user.id)
+            );
+
+        // Não encontrou ninguém
+        if (filteredUsers.length === 0) {
+
+            await redisClient.zAdd(
+                'matchmaking',
+                {
+                    score: user.elo,
+                    value: String(user.id)
+                }
+            );
+
+            console.log('Procurando partida...');
+
+            return;
+
         }
-        
-        //Se encontrar outros jogadores, fará uma escolha por rank mais proximo e criará a partida no bd
-        let bestUser = usersSearching[0].value == user.id ? usersSearching[1] : usersSearching[0];
 
-        for(let i = 0; i < usersSearching.length; i++){
+        // Escolhe o jogador mais próximo
+        let bestUser = filteredUsers[0];
 
-            if(usersSearching[i].value == user.id) continue;
-            
-            if(Math.abs((user.elo - usersSearching[i].score) > (user.elo - bestUser.score))){
-                break
+        for (let i = 1; i < filteredUsers.length; i++) {
+
+            const currentUser = filteredUsers[i];
+
+            const currentDiff = Math.abs(
+                user.elo - currentUser.score
+            );
+
+            const bestDiff = Math.abs(
+                user.elo - bestUser.score
+            );
+
+            // Como os resultados vêm ordenados,
+            // se começou a piorar pode parar
+            if (currentDiff > bestDiff) {
+                break;
             }
-            bestUser = usersSearching[i]
+
+            bestUser = currentUser;
 
         }
 
-        await redisClient.zRem("matchmaking", bestUser.value);
-        console.log("Os jogador " + user.name + " Jogará contra "+ bestUser.value)
-    }))
-}
+        // Remove ambos da fila
+        await redisClient.zRem(
+            'matchmaking',
+            [
+                String(bestUser.value),
+                String(user.id)
+            ]
+        );
+
+        // Busca socket do inimigo
+        const enemySocketId =
+            usersOnline.get(
+                Number(bestUser.value)
+            );
+
+        if (!enemySocketId) {
+
+            socket.emit('match-error', {
+                message: 'Jogador desconectou'
+            });
+
+            return;
+
+        }
+
+        const enemySocket =
+            io.sockets.sockets.get(
+                enemySocketId
+            );
+
+        if (!enemySocket) {
+
+            socket.emit('match-error', {
+                message: 'Socket inválido'
+            });
+
+            return;
+
+        }
+
+        // Cria sala
+        const roomId = crypto.randomUUID();
+
+        // Adiciona os jogadores na room
+        socket.join(roomId);
+
+        enemySocket.join(roomId);
+
+        // Emite para ambos
+        io.to(roomId).emit(
+            'match-found',
+            {
+                room_id: roomId,
+
+                players: [
+                    user.id,
+                    Number(bestUser.value)
+                ]
+            }
+        );
+
+        console.log(
+            `${user.name} enfrentará ${bestUser.value}`
+        );
+
+    }));
+
+};

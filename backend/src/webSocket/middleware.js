@@ -41,3 +41,13 @@ export const isAuthWs = ( socket, next ) => {
     }
 
 };
+
+export const asyncHandler = (handler) => {
+   return async (...args) => {
+      try {
+         await handler(...args);
+      } catch (err) {
+         console.error(err);
+      }
+   };
+}
