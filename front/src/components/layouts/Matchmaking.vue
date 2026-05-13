@@ -85,7 +85,7 @@ onMounted(() => {
 
         <!-- Mesa de Jogo -->
         <div v-else class="relative w-full bg-slate-950">
-        <button @click="leaveGame" class="absolute top-2.5 left-2.5 bg-red-500 hover:bg-red-600 text-white px-2.5 py-1.5 border-none rounded cursor-pointer z-10 transition-colors">Voltar à Procura</button>
+
         <Table :cards="gameCards"/>
         </div>
     </div>
