@@ -4,10 +4,8 @@ import { onMounted, ref } from 'vue';
 import Cards from '@/components/layouts/Cards.vue';
 import SideBar from '@/components/ui/SideBar.vue';
 
-import {getCards} from '@/services/CardService.js';
+import { getCards } from '@/services/CardService.js';
 import Matchmaking from '@/components/layouts/Matchmaking.vue';
-
-
 
 // Lógica para controle de seções e sidebar
 const sideIsExpanded = ref(true);

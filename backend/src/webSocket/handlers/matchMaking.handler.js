@@ -14,6 +14,15 @@ export const matchMaking = (socket) => {
 
         const user = await getUserById(userId);
 
+        //Se o jogador n existir
+        if(!user?.id){
+            socket.emit('match-error', {
+                message: 'Jogador não encontrado.'
+            });
+
+            return;
+        }
+
         // Busca jogadores próximos do elo
         const usersSearching =
             await redisClient.zRangeByScoreWithScores(
@@ -75,10 +84,22 @@ export const matchMaking = (socket) => {
         await redisClient.zRem(
             'matchmaking',
             [
-                String(bestUser.value),
+                bestUser.value,
                 String(user.id)
             ]
         );
+
+        //Pegar infos do inimigo
+        const enemy = await getUserById(Number(bestUser.value))
+
+        if(!enemy){
+            
+            socket.emit('match-error', {
+                message: 'Erro ao buscar adversário.'
+            });
+
+            return;
+        }
 
         // Busca socket do inimigo
         const enemySocketId =
@@ -89,7 +110,7 @@ export const matchMaking = (socket) => {
         if (!enemySocketId) {
 
             socket.emit('match-error', {
-                message: 'Jogador desconectou'
+                message: 'Adversário desconectou.'
             });
 
             return;
@@ -104,7 +125,7 @@ export const matchMaking = (socket) => {
         if (!enemySocket) {
 
             socket.emit('match-error', {
-                message: 'Socket inválido'
+                message: 'Erro de conexão.'
             });
 
             return;
@@ -126,14 +147,14 @@ export const matchMaking = (socket) => {
                 room_id: roomId,
 
                 players: [
-                    user.id,
-                    Number(bestUser.value)
+                    {name: user.name, id: user.id, elo: user.elo},
+                    {name: enemy.name, id: enemy.id, elo: enemy.elo}
                 ]
             }
         );
 
         console.log(
-            `${user.name} enfrentará ${bestUser.value}`
+            `${user.name} enfrentará ${enemy.name}`
         );
 
     }));

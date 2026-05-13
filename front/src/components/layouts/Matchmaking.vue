@@ -4,6 +4,9 @@ import Table from '@/components/layouts/gameTable/Table.vue';
 import { user } from '@/composables/useAuth';
 import { searchGame } from '@/services/GameService';
 import { socket } from '@/services/webSocket/socket';
+import { defineRoom } from '@/composables/useGameState';
+
+const emit = defineEmits(["update:currentEnemy"])
 
 const inGame = ref(false);
 const inSearchingGame = ref(false);
@@ -15,8 +18,6 @@ const callSearchGame = async () => {
     socket.emit('search-game')
 };
 
-
-
 const joinFriendGame = () => {
 
 };
@@ -24,17 +25,21 @@ const joinFriendGame = () => {
 const leaveGame = () => {
     inGame.value = false;
     gameCards.value = [];
+
 };
 
 onMounted(() => {
     socket.on(
-        'match-found',
-        (data) => {
-
-            console.log(data);
-
+        'match-found', (data) => {
+            inGame.value = true
+            defineRoom(data)
         }
     );
+    socket.on(
+        'match-error', (data) => {
+            console.log(data);
+        }
+    )
 })
 </script>
 
@@ -81,7 +86,7 @@ onMounted(() => {
         <!-- Mesa de Jogo -->
         <div v-else class="relative w-full bg-slate-950">
         <button @click="leaveGame" class="absolute top-2.5 left-2.5 bg-red-500 hover:bg-red-600 text-white px-2.5 py-1.5 border-none rounded cursor-pointer z-10 transition-colors">Voltar à Procura</button>
-        <Table :cards="gameCards" />
+        <Table :cards="gameCards"/>
         </div>
     </div>
 </template>

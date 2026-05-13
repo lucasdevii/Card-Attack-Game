@@ -9,6 +9,7 @@ export const getCurrentUser = asyncHandler(async (req, res) => {
     return res.status(404).json({ message: 'Usuário não encontrado.' });
   }
   const safeUser = {
+    id: user.id,
     name: user.name,
     email: user.email,
     cards: user.users_cards

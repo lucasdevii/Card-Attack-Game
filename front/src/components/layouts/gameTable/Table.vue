@@ -6,12 +6,13 @@ import Cheap from '@/components/layouts/gameTable/Cheap.vue';
 import { getCards } from '@/services/CardService';
 import { onMounted, onUnmounted, ref, watch } from 'vue';
 import { user } from '@/composables/useAuth';
+import { enemy, room } from '@/composables/useGameState';
 
 const props = defineProps({
   cards: {
     type: Array,
     required: true
-   }
+   },
 })
 
 const infosBase = {index: null, card: null, line: null}
@@ -57,7 +58,7 @@ onUnmounted(() => {
         <CardsInTable :cardsDispatched="enemyCardsDispatched"/>
         <!-- Perfil do inimigo -->
         <div class="absolute top-0">
-          <PerfilInformation/>
+          <PerfilInformation :name="enemy?.name || 'guest'"/>
         </div>
 
         <!-- Perfil do usuário -->
