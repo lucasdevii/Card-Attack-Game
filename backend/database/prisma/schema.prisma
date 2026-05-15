@@ -51,7 +51,6 @@ model users_cards {
 
 model match_players {
   id            Int           @id @default(autoincrement())
-  match_code    String        @unique @default(uuid())
   user_id       Int         
   match_id      Int
   user          users         @relation(fields: [user_id], references: [id])
@@ -59,7 +58,7 @@ model match_players {
 }
 model matches {
   id            Int           @id @default(autoincrement())
-  room_code     String        @unique
+  room_code     String        @unique @default(uuid())
   finished      Boolean       @default(false)
   winner        Int?          //id do jogador
   in_game       Boolean       @default(true)

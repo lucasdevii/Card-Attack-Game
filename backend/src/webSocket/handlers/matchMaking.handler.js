@@ -93,10 +93,17 @@ export const matchMaking = (socket) => {
         //Pegar infos do inimigo
         const enemy = await getUserById(Number(bestUser.value))
 
-        // Cria sala
-        const roomId = crypto.randomUUID();
+        const room = await createMatch(user.id, enemy.id)
+        const roomId = room.room_code
 
-        await createMatch(user.id, enemy.id, roomId)
+        if(!roomId){
+            
+            socket.emit('match-error', {
+                message: 'Erro na criação da partida'
+            });
+
+            return;
+        }
 
         if(!enemy){
             
