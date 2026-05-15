@@ -5,6 +5,7 @@ import { getUserById } from '../../modules/user/user.service.js';
 
 import { usersOnline, io } from '../index.js';
 import { asyncHandler } from '../middleware.js';
+import { createMatch } from '../../modules/game/game.services.js';
 
 export const matchMaking = (socket) => {
 
@@ -92,6 +93,11 @@ export const matchMaking = (socket) => {
         //Pegar infos do inimigo
         const enemy = await getUserById(Number(bestUser.value))
 
+        // Cria sala
+        const roomId = crypto.randomUUID();
+
+        await createMatch(user.id, enemy.id, roomId)
+
         if(!enemy){
             
             socket.emit('match-error', {
@@ -131,9 +137,6 @@ export const matchMaking = (socket) => {
             return;
 
         }
-
-        // Cria sala
-        const roomId = crypto.randomUUID();
 
         // Adiciona os jogadores na room
         socket.join(roomId);
