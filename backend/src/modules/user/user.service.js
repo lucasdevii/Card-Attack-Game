@@ -113,3 +113,19 @@ export const linkUserToCard = async (userId, cardId, tx = prisma) => {
         skipDuplicates: true
     });
 };
+
+export const changeUserStatus = async (userId, status) => {
+    try{
+        await prisma.users.update({
+            where: {
+                id: userId
+            },
+            data: {
+                status: status
+            }
+        })
+    }catch(err){
+        console.log(err)
+        throw err
+    }
+}

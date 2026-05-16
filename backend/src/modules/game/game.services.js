@@ -1,3 +1,4 @@
+import { finished } from "stream";
 import { prisma } from "../../../database/prisma/client.js";
 
 export const createMatch = async (userId, opponentId) => {
@@ -28,4 +29,16 @@ export const createMatch = async (userId, opponentId) => {
     console.log(error);
     throw error;
   }
+}
+export const defineWinner = async (userId, roomId) => {
+  await prisma.matches.update({
+    where: {
+      id: roomId
+    },
+    data: {
+      winner: userId,
+      in_game: false,
+      finished: true
+    }
+  })
 }
