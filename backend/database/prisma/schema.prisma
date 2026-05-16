@@ -10,7 +10,7 @@ enum userStates {
   OFFLINE
   ONLINE
   SEARCHING
-  IN_GAME
+  PLAYING
 }
 
 model cards {
@@ -61,6 +61,5 @@ model matches {
   room_code     String        @unique @default(uuid())
   finished      Boolean       @default(false)
   winner        Int?          //id do jogador
-  in_game       Boolean       @default(true)
   players       match_players[]
 }
