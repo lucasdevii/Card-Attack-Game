@@ -37,7 +37,6 @@ export const defineWinner = async (userId, roomId) => {
     },
     data: {
       winner: userId,
-      in_game: false,
       finished: true
     }
   })
