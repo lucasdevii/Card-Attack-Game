@@ -27,50 +27,29 @@ export const createUser = async (name, email, password) => {
     
 }
 
-export const getUserByEmail = async (email) => {
-    try {
-        const user = await prisma.users.findUnique({ where: { email } });
-        return user;
-    }catch (error) {        
-        console.error('Erro ao buscar usuário por email:', error);
-        throw error;
-    }
-
+export const getUserByEmail = async (tx = prisma, email) => {
+    const user = await tx.users.findUnique({ where: { email } });
+    return user;
 }
 
-export const getUserById = async (id) => {
-    try {
-        const user = await prisma.users.findUnique({ where: { id }, 
-            include: { users_cards: {
-                include: { cards: true }
-             } 
-            } 
-        });
-        return user;
-    } catch (error) {
-        console.error('Erro ao buscar usuário por ID:', error);
-        throw error;
-    }
+export const getUserById = async (tx = prisma, id) => {
+    const user = await tx.users.findUnique({ where: { id }, 
+        include: { users_cards: {
+            include: { cards: true }
+         } 
+        } 
+    });
+    return user;
 }
 
 export const verifyExistingUser = async (email) => {
-    try {
-        const user = await prisma.users.findUnique({ where: { email } });
-        return !!user;
-    } catch (error) {
-        console.error('Erro ao verificar usuário existente:', error);
-        throw error;
-    }
+    const user = await prisma.users.findUnique({ where: { email } });
+    return !!user;
 }
 
 export const passwordMatches = async (hashedPassword, password) => {
-    try{
-        const passwordIsIdentical = await bcrypt.compare(password, hashedPassword);
-        return passwordIsIdentical;
-    } catch (error) {
-        console.error('Erro ao comparar senhas:', error);
-        throw error;
-    }
+    const passwordIsIdentical = await bcrypt.compare(password, hashedPassword);
+    return passwordIsIdentical;
 }
 /**
  * 
@@ -114,18 +93,21 @@ export const linkUserToCard = async (userId, cardId, tx = prisma) => {
     });
 };
 
-export const changeUserStatus = async (userId, status) => {
-    try{
-        await prisma.users.update({
-            where: {
-                id: userId
-            },
-            data: {
-                status: status
-            }
-        })
-    }catch(err){
-        console.log(err)
-        throw err
+export const changeUserStatus = async (tx = prisma, userId, status) => {
+    await tx.users.update({
+        where: {
+            id: userId
+        },
+        data: {
+            status: status
+        }
+    })
+}
+
+export const shuffleCheap = (cheap) => { //Modern version of fisher yates
+    for(let i = cheap.length - 1; i > 0; i--){
+        const randomIndex = Math.floor(Math.random() * (i + 1))
+        [cheap[i], cheap[randomIndex]] = [cheap[randomIndex], cheap[i]];
     }
+    return cheap
 }

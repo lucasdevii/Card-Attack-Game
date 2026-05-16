@@ -1,19 +1,19 @@
 import crypto from 'crypto';
 import redisClient from '../../../database/redis.js';
 
-import { getUserById } from '../../modules/user/user.service.js';
+import { getUserById, shuffleCheap } from '../../modules/user/user.service.js';
 
 import { usersOnline, io } from '../index.js';
-import { asyncHandler } from '../middleware.js';
+import { asyncHandler, transactionHandler } from '../middleware.js';
 import { createMatch } from '../../modules/game/game.services.js';
 
 export const matchMaking = (socket) => {
 
-    socket.on('search-game', asyncHandler(async () => {
+    socket.on('search-game', transactionHandler(async (tx) => {
 
         const userId = socket.user.id;
 
-        const user = await getUserById(userId);
+        const user = await getUserById(tx, userId);
 
         //Se o jogador n existir
         if(!user?.id){
@@ -90,20 +90,9 @@ export const matchMaking = (socket) => {
             ]
         );
 
+
         //Pegar infos do inimigo
-        const enemy = await getUserById(Number(bestUser.value))
-
-        const room = await createMatch(user.id, enemy.id)
-        const roomId = room.room_code
-
-        if(!roomId){
-            
-            socket.emit('match-error', {
-                message: 'Erro na criação da partida'
-            });
-
-            return;
-        }
+        const enemy = await getUserById(tx, Number(bestUser.value))
 
         if(!enemy){
             
@@ -113,6 +102,10 @@ export const matchMaking = (socket) => {
 
             return;
         }
+
+        //Embaralhar cartas
+        const userCheap = shuffleCheap(user.users_cards);
+        const enemyCheap = shuffleCheap(enemy.users_cards);
 
         // Busca socket do inimigo
         const enemySocketId =
@@ -129,6 +122,7 @@ export const matchMaking = (socket) => {
             return;
 
         }
+        
 
         const enemySocket =
             io.sockets.sockets.get(
@@ -143,6 +137,18 @@ export const matchMaking = (socket) => {
 
             return;
 
+        }
+
+        const room = await createMatch(tx, user.id, enemy.id)
+        const roomId = room.room_code
+
+        if(!roomId){
+            
+            socket.emit('match-error', {
+                message: 'Erro na criação da partida'
+            });
+
+            return;
         }
 
         // Adiciona os jogadores na room

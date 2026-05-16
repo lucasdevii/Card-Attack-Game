@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
+import { prisma } from '../../database/prisma/client.js';
 
 export const isAuthWs = ( socket, next ) => {
 
@@ -43,11 +44,28 @@ export const isAuthWs = ( socket, next ) => {
 };
 
 export const asyncHandler = (handler) => {
-   return async (...args) => {
-      try {
-         await handler(...args);
-      } catch (err) {
-         console.error(err);
-      }
-   };
+    return async (...args) => {
+        try {
+            await handler(...args);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+}
+
+export const transactionHandler = (handler) => {
+    return async (...args) => {
+        try{
+            return await prisma.$transaction(
+                async (tx) => {
+                    return await handler(
+                        tx,
+                        ...args
+                    );
+                }
+            );
+        }catch(err){
+            console.log(err)
+        }
+    }
 }
