@@ -64,13 +64,9 @@ export const matchMaking = (socket) => {
 
             const currentUser = filteredUsers[i];
 
-            const currentDiff = Math.abs(
-                user.elo - currentUser.score
-            );
+            const currentDiff = Math.abs(user.elo - currentUser.score);
 
-            const bestDiff = Math.abs(
-                user.elo - bestUser.score
-            );
+            const bestDiff = Math.abs(user.elo - bestUser.score);
 
             // Como os resultados vêm ordenados,
             // se começou a piorar pode parar
@@ -112,9 +108,7 @@ export const matchMaking = (socket) => {
 
         // Busca socket do inimigo
         const enemySocketId =
-            usersOnline.get(
-                Number(bestUser.value)
-            );
+            usersOnline.get(Number(bestUser.value));
 
         if (!enemySocketId) {
 
@@ -128,9 +122,7 @@ export const matchMaking = (socket) => {
         
 
         const enemySocket =
-            io.sockets.sockets.get(
-                enemySocketId
-            );
+            io.sockets.sockets.get(enemySocketId);
 
         if (!enemySocket) {
 
@@ -168,14 +160,6 @@ export const matchMaking = (socket) => {
                 room: room,
             }
         );
-
-
-
-        
-        console.log(
-            `${user.name} enfrentará ${enemy.name}`
-        );
-
     }));
 
 };
