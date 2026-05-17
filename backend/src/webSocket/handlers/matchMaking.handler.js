@@ -6,7 +6,7 @@ import { usersOnline, io } from '../index.js';
 import { asyncHandler, transactionHandler } from '../middleware.js';
 import { createMatch } from '../../modules/game/game.services.js';
 import { shuffleCheap } from '../../modules/card/card.service.js';
-import { saveMatch } from '../../modules/card/card.redis.js';
+import { saveMatch } from '../../modules/game/game.redis.js'
 
 export const matchMaking = (socket) => {
 
@@ -160,16 +160,12 @@ export const matchMaking = (socket) => {
 
         enemySocket.join(roomId);
 
+        await saveMatch(room)
         // Emite para ambos
         io.to(roomId).emit(
             'match-found',
             {
-                room_id: roomId,
                 room: room,
-                players: [
-                    {name: user.name, id: user.id, elo: user.elo},
-                    {name: enemy.name, id: enemy.id, elo: enemy.elo}
-                ]
             }
         );
 
