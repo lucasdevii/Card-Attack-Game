@@ -1,7 +1,16 @@
 import { finished } from "stream";
 import { prisma } from "../../../database/prisma/client.js";
 
-export const createMatch = async ( userId, opponentId, tx = prisma) => {
+/**
+ * 
+ * @param {Integer} userId 
+ * @param {Integer} opponentId 
+ * @param {Boolean} removeSensiveData 
+ * @param {PrismaClient} tx 
+ * @returns 
+ */
+
+export const createMatch = async ( userId, opponentId, removeSensiveData, tx = prisma) => {
   try{  
     return await tx.matches.create({
       data: {
@@ -28,10 +37,13 @@ export const createMatch = async ( userId, opponentId, tx = prisma) => {
         players: {
           include: {
             user: {
-              include: {
+              select: {
+                id: true,
+                name: true,
+                elo: true,
                 users_cards: {
                   include: {
-                    cards: true
+                      cards: true
                   }
                 }
               }
@@ -40,6 +52,7 @@ export const createMatch = async ( userId, opponentId, tx = prisma) => {
         }
       }
     })
+
   }catch(error) {
     console.log(error);
     throw error;
