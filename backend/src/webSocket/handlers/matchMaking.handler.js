@@ -144,6 +144,8 @@ export const matchMaking = (socket) => {
         const room = await createMatch(user.id, enemy.id, tx)
         const roomId = room.room_code
 
+        
+
         if(!roomId){
             
             socket.emit('match-error', {

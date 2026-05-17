@@ -10,7 +10,7 @@ import { prisma } from "../../../database/prisma/client.js";
  * @returns 
  */
 
-export const createMatch = async ( userId, opponentId, removeSensiveData, tx = prisma) => {
+export const createMatch = async ( userId, opponentId, tx = prisma) => {
   try{  
     return await tx.matches.create({
       data: {
