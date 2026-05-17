@@ -20,7 +20,7 @@ export const getCurrentUser = asyncHandler(async (req, res) => {
 export const register = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
-  const existingUser = await getUserByEmail(email);
+  const existingUser = await getUserByEmail({email: email});
   if (existingUser) {
       return res.status(400).json({ message: 'Email já está em uso.' });
   }
@@ -64,7 +64,7 @@ export const login = asyncHandler(async (req, res) => {
       try {
         const decoded = jwt.verify(cookiesToken, process.env.JWT_SECRET);
 
-        const userFromToken = await getUserById(decoded.id);
+        const userFromToken = await getUserById({id: decoded.id});
 
         if (!userFromToken) {
           res.clearCookie('token'); // usuário deletado
@@ -74,7 +74,7 @@ export const login = asyncHandler(async (req, res) => {
       }
     }
 
-    const user = await getUserByEmail(email);
+    const user = await getUserByEmail({email: email});
     const hash = user?.password || FAKE_HASH;
 
     const isPasswordValid = await passwordMatches(hash, password);
@@ -92,14 +92,3 @@ export const login = asyncHandler(async (req, res) => {
       })
       .json({ message: 'Login realizado com sucesso!' });
 });
-
-export const userCadaster = async (req, res, next) => {
-    try {
-        const validatedData = userSchema.parse(req.body);
-        const { username, email, password } = validatedData;
-        await createUser(username, email, password);
-        res.status(201).json({ message: "Usuário criado com sucesso!" });
-    } catch (error) {
-        next(error);
-    }
-};

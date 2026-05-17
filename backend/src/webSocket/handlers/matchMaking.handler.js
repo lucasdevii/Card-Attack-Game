@@ -1,11 +1,12 @@
 import crypto from 'crypto';
 import redisClient from '../../../database/redis.js';
 
-import { getUserById, shuffleCheap } from '../../modules/user/user.service.js';
-
+import { getUserById} from '../../modules/user/user.service.js';
 import { usersOnline, io } from '../index.js';
 import { asyncHandler, transactionHandler } from '../middleware.js';
 import { createMatch } from '../../modules/game/game.services.js';
+import { shuffleCheap } from '../../modules/card/card.service.js';
+import { saveMatch } from '../../modules/card/card.redis.js';
 
 export const matchMaking = (socket) => {
 
@@ -13,7 +14,7 @@ export const matchMaking = (socket) => {
 
         const userId = socket.user.id;
 
-        const user = await getUserById(tx, userId);
+        const user = await getUserById(userId, tx);
 
         //Se o jogador n existir
         if(!user?.id){
@@ -92,7 +93,7 @@ export const matchMaking = (socket) => {
 
 
         //Pegar infos do inimigo
-        const enemy = await getUserById(tx, Number(bestUser.value))
+        const enemy = await getUserById(Number(bestUser.value), tx)
 
         if(!enemy){
             
@@ -104,8 +105,10 @@ export const matchMaking = (socket) => {
         }
 
         //Embaralhar cartas
-        const userCheap = shuffleCheap(user.users_cards);
-        const enemyCheap = shuffleCheap(enemy.users_cards);
+        let userCheap = JSON.parse(JSON.stringify(user.users_cards))
+        shuffleCheap(userCheap);
+        let enemyCheap = JSON.parse(JSON.stringify(user.users_cards))
+        shuffleCheap(enemyCheap);
 
         // Busca socket do inimigo
         const enemySocketId =
@@ -138,8 +141,7 @@ export const matchMaking = (socket) => {
             return;
 
         }
-
-        const room = await createMatch(tx, user.id, enemy.id)
+        const room = await createMatch(user.id, enemy.id, tx)
         const roomId = room.room_code
 
         if(!roomId){
@@ -161,7 +163,7 @@ export const matchMaking = (socket) => {
             'match-found',
             {
                 room_id: roomId,
-
+                room: room,
                 players: [
                     {name: user.name, id: user.id, elo: user.elo},
                     {name: enemy.name, id: enemy.id, elo: enemy.elo}
@@ -169,6 +171,9 @@ export const matchMaking = (socket) => {
             }
         );
 
+
+
+        
         console.log(
             `${user.name} enfrentará ${enemy.name}`
         );

@@ -33,6 +33,7 @@ onMounted(() => {
         'match-found', (data) => {
             inGame.value = true
             defineRoom(data)
+            console.log(data)
         }
     );
     socket.on(

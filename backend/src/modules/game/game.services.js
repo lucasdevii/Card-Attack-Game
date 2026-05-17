@@ -1,9 +1,9 @@
 import { finished } from "stream";
 import { prisma } from "../../../database/prisma/client.js";
 
-export const createMatch = async (userId, opponentId) => {
+export const createMatch = async ( userId, opponentId, tx = prisma) => {
   try{  
-    return await prisma.matches.create({
+    return await tx.matches.create({
       data: {
         players: {
           create: [
@@ -22,6 +22,21 @@ export const createMatch = async (userId, opponentId) => {
               }
             }
           ]
+        }
+      },
+      include: {
+        players: {
+          include: {
+            user: {
+              include: {
+                users_cards: {
+                  include: {
+                    cards: true
+                  }
+                }
+              }
+            }
+          }
         }
       }
     })

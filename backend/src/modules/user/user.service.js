@@ -27,12 +27,12 @@ export const createUser = async (name, email, password) => {
     
 }
 
-export const getUserByEmail = async (tx = prisma, email) => {
+export const getUserByEmail = async (email, tx = prisma) => {
     const user = await tx.users.findUnique({ where: { email } });
     return user;
 }
 
-export const getUserById = async (tx = prisma, id) => {
+export const getUserById = async (id, tx = prisma) => {
     const user = await tx.users.findUnique({ where: { id }, 
         include: { users_cards: {
             include: { cards: true }
@@ -93,7 +93,7 @@ export const linkUserToCard = async (userId, cardId, tx = prisma) => {
     });
 };
 
-export const changeUserStatus = async (tx = prisma, userId, status) => {
+export const changeUserStatus = async (userId, status,tx = prisma) => {
     await tx.users.update({
         where: {
             id: userId
@@ -104,10 +104,3 @@ export const changeUserStatus = async (tx = prisma, userId, status) => {
     })
 }
 
-export const shuffleCheap = (cheap) => { //Modern version of fisher yates
-    for(let i = cheap.length - 1; i > 0; i--){
-        const randomIndex = Math.floor(Math.random() * (i + 1))
-        [cheap[i], cheap[randomIndex]] = [cheap[randomIndex], cheap[i]];
-    }
-    return cheap
-}

@@ -54,14 +54,11 @@ export const asyncHandler = (handler) => {
 }
 
 export const transactionHandler = (handler) => {
-    return async (...args) => {
+    return async () => {
         try{
             return await prisma.$transaction(
                 async (tx) => {
-                    return await handler(
-                        tx,
-                        ...args
-                    );
+                    return await handler(tx);
                 }
             );
         }catch(err){

@@ -9,3 +9,4 @@ export const getCards = (req, res) => {
     const cards = fs.readFileSync(path.join(__dirname, "../../mocks/cards.json"), "utf-8");
     res.status(200).json(JSON.parse(cards))
 }
+
