@@ -45,6 +45,8 @@ model users_cards {
   current_exp   Int?          @default(0)
   cards         cards         @relation(fields: [card_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   users         users         @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @default(now())
 
   @@id([user_id, card_id])
 }
@@ -59,7 +61,10 @@ model match_players {
 model matches {
   id            Int           @id @default(autoincrement())
   room_code     String        @unique @default(uuid())
+  turn          Int?           //id do jogador
   finished      Boolean       @default(false)
   winner        Int?          //id do jogador
   players       match_players[]
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @default(now())
 }
