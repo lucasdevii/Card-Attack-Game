@@ -55,6 +55,7 @@ model match_players {
   id            Int           @id @default(autoincrement())
   user_id       Int         
   match_id      Int
+  life          Int           @default(100)
   user          users         @relation(fields: [user_id], references: [id])
   match         matches       @relation(fields: [match_id], references: [id])
 }
